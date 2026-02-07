@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react';
 import Scene from './components/Scene';
 import DotGrid from './components/DotGrid';
+import WelcomeCard from './components/WelcomeCard';
 import ExperienceCard from './components/ExperienceCard';
 import FlightControls from './components/FlightControls';
 import './App.css';
@@ -26,6 +27,7 @@ export default function App() {
           </Canvas>
         </DotGrid>
 
+        <WelcomeCard />
         <ExperienceCard />
         <FlightControls />
       </div>

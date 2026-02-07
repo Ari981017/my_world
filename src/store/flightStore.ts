@@ -6,6 +6,7 @@ interface FlightState {
   isPlaying: boolean;
   isTransitioning: boolean;
   showCard: boolean;
+  hasStarted: boolean;
 
   // Actions
   play: () => void;
@@ -15,13 +16,15 @@ interface FlightState {
   goToLocation: (index: number) => void;
   setTransitioning: (value: boolean) => void;
   setShowCard: (value: boolean) => void;
+  startTour: () => void;
 }
 
 export const useFlightStore = create<FlightState>((set) => ({
   currentIndex: 0,
-  isPlaying: true, // Auto-start the tour
+  isPlaying: false,
   isTransitioning: false,
   showCard: false,
+  hasStarted: false,
 
   play: () => set({ isPlaying: true }),
   pause: () => set({ isPlaying: false }),
@@ -58,4 +61,5 @@ export const useFlightStore = create<FlightState>((set) => ({
 
   setTransitioning: (value: boolean) => set({ isTransitioning: value }),
   setShowCard: (value: boolean) => set({ showCard: value }),
+  startTour: () => set({ hasStarted: true, isPlaying: true }),
 }));
