@@ -22,27 +22,48 @@ export function useFlightAnimation({
   globeRef,
 }: UseFlightAnimationProps) {
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
-  const { currentIndex, isPlaying, setTransitioning, setShowCard } =
+  const { currentIndex, previousIndex, isPlaying, setTransitioning, setShowCard } =
     useFlightStore();
 
   useEffect(() => {
     const airplane = airplaneRef.current?.group;
     if (!airplane) return;
 
-    // Get current and next positions
-    const currentExp = experiences[currentIndex];
-    const nextIndex = (currentIndex + 1) % experiences.length;
-    const nextExp = experiences[nextIndex];
+    // CASE 1: Initial positioning (previousIndex is null)
+    if (previousIndex === null) {
+      const firstExp = experiences[currentIndex];
+      const startPos = latLonToVector3(
+        firstExp.location.coordinates.lat,
+        firstExp.location.coordinates.lon,
+        GLOBE_RADIUS + FLIGHT_HEIGHT_OFFSET
+      );
+
+      // Position airplane without animation
+      airplane.position.copy(startPos);
+
+      // Update store to mark airplane as positioned
+      useFlightStore.setState({ previousIndex: currentIndex });
+      return;
+    }
+
+    // CASE 2: No animation needed (already at destination)
+    if (previousIndex === currentIndex) {
+      return;
+    }
+
+    // CASE 3: Animate FROM previousIndex TO currentIndex
+    const startExp = experiences[previousIndex];
+    const endExp = experiences[currentIndex];
 
     const startPos = latLonToVector3(
-      currentExp.location.coordinates.lat,
-      currentExp.location.coordinates.lon,
+      startExp.location.coordinates.lat,
+      startExp.location.coordinates.lon,
       GLOBE_RADIUS + FLIGHT_HEIGHT_OFFSET
     );
 
     const endPos = latLonToVector3(
-      nextExp.location.coordinates.lat,
-      nextExp.location.coordinates.lon,
+      endExp.location.coordinates.lat,
+      endExp.location.coordinates.lon,
       GLOBE_RADIUS + FLIGHT_HEIGHT_OFFSET
     );
 
@@ -63,11 +84,17 @@ export function useFlightAnimation({
     // Create GSAP timeline
     const tl = gsap.timeline({
       paused: !isPlaying,
-      onStart: () => setTransitioning(true),
+      onStart: () => {
+        setTransitioning(true);
+      },
       onComplete: () => {
         setTransitioning(false);
         setShowCard(true);
-        // No more auto-advance - user controls navigation via "Continue" button
+        // Update previousIndex to mark airplane's new position
+        useFlightStore.setState({
+          previousIndex: currentIndex,
+          isPlaying: false
+        });
       },
     });
 
@@ -100,7 +127,7 @@ export function useFlightAnimation({
     return () => {
       tl.kill();
     };
-  }, [currentIndex, airplaneRef, globeRef, isPlaying, setTransitioning, setShowCard]);
+  }, [currentIndex, previousIndex, airplaneRef, globeRef, isPlaying, setTransitioning, setShowCard]);
 
   // Handle play/pause
   useEffect(() => {

@@ -3,6 +3,7 @@ import { experiences } from '../data/experiences';
 
 interface FlightState {
   currentIndex: number;
+  previousIndex: number | null;
   isPlaying: boolean;
   isTransitioning: boolean;
   showCard: boolean;
@@ -21,6 +22,7 @@ interface FlightState {
 
 export const useFlightStore = create<FlightState>((set) => ({
   currentIndex: 0,
+  previousIndex: null,
   isPlaying: false,
   isTransitioning: false,
   showCard: false,
@@ -33,6 +35,7 @@ export const useFlightStore = create<FlightState>((set) => ({
     set((state) => ({
       currentIndex: (state.currentIndex + 1) % experiences.length,
       showCard: false,
+      isPlaying: true,
     })),
 
   previousLocation: () =>
@@ -42,6 +45,7 @@ export const useFlightStore = create<FlightState>((set) => ({
           ? experiences.length - 1
           : state.currentIndex - 1,
       showCard: false,
+      isPlaying: true,
     })),
 
   goToLocation: (index: number) => {
@@ -56,10 +60,16 @@ export const useFlightStore = create<FlightState>((set) => ({
     set({
       currentIndex: index,
       showCard: false,
+      isPlaying: true,
     });
   },
 
   setTransitioning: (value: boolean) => set({ isTransitioning: value }),
   setShowCard: (value: boolean) => set({ showCard: value }),
-  startTour: () => set({ hasStarted: true, isPlaying: true }),
+  startTour: () => set({
+    hasStarted: true,
+    isPlaying: false,
+    showCard: true,
+    previousIndex: 0
+  }),
 }));

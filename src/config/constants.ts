@@ -69,5 +69,7 @@ export const UI_TEXT = {
   restart: 'Restart',
   close: 'Close',
   keyResponsibilities: 'Key Responsibilities',
-  present: 'Present'
+  present: 'Present',
+  viaggio: 'VIAGGIO',
+  lavoro: 'LAVORO'
 };

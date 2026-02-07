@@ -60,49 +60,7 @@ export default function ExperienceCard() {
 
   return (
     <div className="experience-card">
-      <div className="card-header">
-        <h2>{exp.jobTitle}</h2>
-        <h3>{exp.company}</h3>
-        <p className="location">{exp.location.name}</p>
-        <p className="period">{formatPeriod(exp.period.start, exp.period.end)}</p>
-      </div>
-
-      <div className="card-body">
-        <div className="technologies">
-          {exp.technologies.map((tech) => (
-            <span key={tech} className="tech-badge">
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        <p className="description">{exp.description}</p>
-
-        <div className="responsibilities">
-          <h4>{UI_TEXT.keyResponsibilities}</h4>
-          <ul>
-            {exp.responsibilities.map((resp, idx) => (
-              <li key={idx}>{resp}</li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Continue button to advance to next location */}
-        <div className="card-actions">
-          <button
-            className="continue-button"
-            onClick={() => {
-              const { setShowCard, nextLocation } = useFlightStore.getState();
-              setShowCard(false);
-              nextLocation();
-            }}
-            aria-label="Continue to next location"
-          >
-            {currentIndex === experiences.length - 1 ? UI_TEXT.restart : UI_TEXT.continue}
-          </button>
-        </div>
-      </div>
-
+      {/* Close button */}
       <button
         className="close-button"
         onClick={() => useFlightStore.getState().setShowCard(false)}
@@ -110,6 +68,101 @@ export default function ExperienceCard() {
       >
         ×
       </button>
+
+      {/* Location Header */}
+      <div className="location-header">
+        <img
+          src={`https://flagcdn.com/w80/${exp.countryCode.toLowerCase()}.png`}
+          alt={exp.countryCode}
+          className="country-flag"
+        />
+        <h2 className="location-name">{exp.location.name}</h2>
+      </div>
+
+      {/* VIAGGIO Section */}
+      <div className="section viaggio-section">
+        <div className="section-header">
+          <span className="section-icon">🌍</span>
+          <h3>VIAGGIO</h3>
+        </div>
+        <p className="travel-description">{exp.viaggio.description}</p>
+
+        {exp.viaggio.visitDate && (
+          <p className="visit-info">
+            <strong>Periodo visita:</strong> {exp.viaggio.visitDate}
+          </p>
+        )}
+
+        {exp.viaggio.visitDuration && (
+          <p className="visit-info">
+            <strong>Durata:</strong> {exp.viaggio.visitDuration}
+          </p>
+        )}
+
+        {exp.viaggio.highlights && exp.viaggio.highlights.length > 0 && (
+          <ul className="travel-highlights">
+            {exp.viaggio.highlights.map((h, i) => (
+              <li key={i}>{h}</li>
+            ))}
+          </ul>
+        )}
+
+        {exp.viaggio.tripType && (
+          <p className="trip-type">
+            <em>{exp.viaggio.tripType}</em>
+          </p>
+        )}
+      </div>
+
+      {/* LAVORO Section */}
+      <div className="section lavoro-section">
+        <div className="section-header">
+          <span className="section-icon">💼</span>
+          <h3>LAVORO</h3>
+        </div>
+
+        <div className="work-meta">
+          <h4 className="job-title">{exp.lavoro.jobTitle}</h4>
+          <p className="company">{exp.lavoro.company}</p>
+          <p className="period">
+            {formatPeriod(exp.lavoro.period.start, exp.lavoro.period.end)}
+          </p>
+        </div>
+
+        <div className="technologies">
+          {exp.lavoro.technologies.map((tech) => (
+            <span key={tech} className="tech-badge">
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        <p className="work-description">{exp.lavoro.description}</p>
+
+        <div className="responsibilities">
+          <h5>{UI_TEXT.keyResponsibilities}</h5>
+          <ul>
+            {exp.lavoro.responsibilities.map((resp, idx) => (
+              <li key={idx}>{resp}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Continue button to advance to next location */}
+      <div className="card-actions">
+        <button
+          className="continue-button"
+          onClick={() => {
+            const { setShowCard, nextLocation } = useFlightStore.getState();
+            setShowCard(false);
+            nextLocation();
+          }}
+          aria-label="Continue to next location"
+        >
+          {currentIndex === experiences.length - 1 ? UI_TEXT.restart : UI_TEXT.continue}
+        </button>
+      </div>
     </div>
   );
 }
