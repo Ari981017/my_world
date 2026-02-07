@@ -17,7 +17,6 @@ export default function App() {
           proximity={120}
           shockRadius={250}
           shockStrength={5}
-          resistance={750}
           returnDuration={1.5}
         >
           <Canvas camera={{ position: [0, 0, 9], fov: 75 }}>

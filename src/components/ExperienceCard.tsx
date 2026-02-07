@@ -1,5 +1,6 @@
 import { useFlightStore } from '../store/flightStore';
 import { experiences } from '../data/experiences';
+import { UI_TEXT } from '../config/constants';
 import './ExperienceCard.css';
 
 export default function ExperienceCard() {
@@ -9,17 +10,52 @@ export default function ExperienceCard() {
 
   const exp = experiences[currentIndex];
 
-  const formatPeriod = (start: string, end: string) => {
-    const startDate = new Date(start + '-01');
-    const endStr =
-      end === 'present'
-        ? 'Present'
-        : new Date(end + '-01').toLocaleDateString('en-US', {
-            month: 'short',
-            year: 'numeric',
-          });
+  const formatPeriod = (start: string, end: string): string => {
+    try {
+      // Validate date format (YYYY-MM)
+      const datePattern = /^\d{4}-\d{2}$/;
+      if (!datePattern.test(start)) {
+        console.error(`Invalid start date format: ${start}`);
+        return 'Invalid date range';
+      }
 
-    return `${startDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - ${endStr}`;
+      const startDate = new Date(start + '-01');
+
+      // Check if date is valid
+      if (isNaN(startDate.getTime())) {
+        console.error(`Invalid start date: ${start}`);
+        return 'Invalid date range';
+      }
+
+      let endStr = UI_TEXT.present;
+
+      if (end !== 'present') {
+        if (!datePattern.test(end)) {
+          console.error(`Invalid end date format: ${end}`);
+          return 'Invalid date range';
+        }
+
+        const endDate = new Date(end + '-01');
+
+        if (isNaN(endDate.getTime())) {
+          console.error(`Invalid end date: ${end}`);
+          return 'Invalid date range';
+        }
+
+        endStr = endDate.toLocaleDateString('en-US', {
+          month: 'short',
+          year: 'numeric',
+        });
+      }
+
+      return `${startDate.toLocaleDateString('en-US', {
+        month: 'short',
+        year: 'numeric'
+      })} - ${endStr}`;
+    } catch (error) {
+      console.error('Error formatting period:', error);
+      return 'Invalid date range';
+    }
   };
 
   return (
@@ -43,7 +79,7 @@ export default function ExperienceCard() {
         <p className="description">{exp.description}</p>
 
         <div className="responsibilities">
-          <h4>Key Responsibilities</h4>
+          <h4>{UI_TEXT.keyResponsibilities}</h4>
           <ul>
             {exp.responsibilities.map((resp, idx) => (
               <li key={idx}>{resp}</li>
@@ -62,7 +98,7 @@ export default function ExperienceCard() {
             }}
             aria-label="Continue to next location"
           >
-            {currentIndex === experiences.length - 1 ? 'Ricomincia' : 'Continua'}
+            {currentIndex === experiences.length - 1 ? UI_TEXT.restart : UI_TEXT.continue}
           </button>
         </div>
       </div>
@@ -70,7 +106,7 @@ export default function ExperienceCard() {
       <button
         className="close-button"
         onClick={() => useFlightStore.getState().setShowCard(false)}
-        aria-label="Close card"
+        aria-label={UI_TEXT.close}
       >
         ×
       </button>

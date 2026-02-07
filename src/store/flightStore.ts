@@ -41,11 +41,20 @@ export const useFlightStore = create<FlightState>((set) => ({
       showCard: false,
     })),
 
-  goToLocation: (index: number) =>
+  goToLocation: (index: number) => {
+    // Validate index bounds
+    if (index < 0 || index >= experiences.length) {
+      console.error(
+        `Invalid location index: ${index}. Valid range: 0-${experiences.length - 1}`
+      );
+      return;
+    }
+
     set({
       currentIndex: index,
       showCard: false,
-    }),
+    });
+  },
 
   setTransitioning: (value: boolean) => set({ isTransitioning: value }),
   setShowCard: (value: boolean) => set({ showCard: value }),

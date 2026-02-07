@@ -2,6 +2,12 @@ import { useRef, forwardRef, useImperativeHandle } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import {
+  AIRPLANE_SCALE,
+  AIRPLANE_BOBBING_FREQUENCY,
+  AIRPLANE_BOBBING_AMPLITUDE
+} from '../config/constants';
+import { useFlightStore } from '../store/flightStore';
 
 export interface AirplaneHandle {
   group: THREE.Group | null;
@@ -14,24 +20,31 @@ interface AirplaneProps {
 }
 
 const Airplane = forwardRef<AirplaneHandle, AirplaneProps>(
-  ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 0.5 }, ref) => {
+  ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = AIRPLANE_SCALE }, ref) => {
     const groupRef = useRef<THREE.Group>(null);
     const { scene } = useGLTF('/models/airplane.glb');
+    const isTransitioning = useFlightStore((state) => state.isTransitioning);
 
     useImperativeHandle(ref, () => ({
       group: groupRef.current,
     }));
 
-    // Optional: Add subtle bobbing animation for realism
+    // Subtle bobbing animation for realism
     useFrame((state) => {
       if (groupRef.current) {
         const time = state.clock.getElapsedTime();
-        // Subtle vertical oscillation
-        const baseY = groupRef.current.position.y;
-        const offset = Math.sin(time * 2) * 0.001;
-        // Don't interfere with main animation position
-        if (Math.abs(offset) < 0.01) {
-          groupRef.current.position.y = baseY + offset;
+
+        // Store current position (set by flight animation)
+        const currentX = groupRef.current.position.x;
+        const currentY = groupRef.current.position.y;
+        const currentZ = groupRef.current.position.z;
+
+        // Calculate subtle vertical oscillation
+        const offset = Math.sin(time * AIRPLANE_BOBBING_FREQUENCY) * AIRPLANE_BOBBING_AMPLITUDE;
+
+        // Only apply bobbing during active flight animation
+        if (isTransitioning) {
+          groupRef.current.position.set(currentX, currentY + offset, currentZ);
         }
       }
     });

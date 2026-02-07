@@ -1,9 +1,21 @@
+import {
+  AMBIENT_LIGHT_INTENSITY,
+  DIRECTIONAL_LIGHT_INTENSITY,
+  DIRECTIONAL_LIGHT_POSITIONS
+} from '../config/constants'
+
 export default function Lighting() {
   return (
     <>
-      <ambientLight intensity={1.5} />
-      <directionalLight position={[5, 3, 5]} intensity={0.5} />
-      <directionalLight position={[-5, -3, -5]} intensity={0.5} />
+      <ambientLight intensity={AMBIENT_LIGHT_INTENSITY} />
+      <directionalLight
+        position={DIRECTIONAL_LIGHT_POSITIONS[0]}
+        intensity={DIRECTIONAL_LIGHT_INTENSITY}
+      />
+      <directionalLight
+        position={DIRECTIONAL_LIGHT_POSITIONS[1]}
+        intensity={DIRECTIONAL_LIGHT_INTENSITY}
+      />
     </>
   );
 }

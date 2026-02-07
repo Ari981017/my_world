@@ -3,26 +3,32 @@ import { TextureLoader } from 'three'
 import { useLoader } from '@react-three/fiber'
 import * as THREE from 'three'
 import earthTexture from '../assets/globe/8k_earth_daymap.jpg'
+import {
+  GLOBE_RADIUS,
+  GLOBE_SEGMENTS,
+  GLOBE_ATMOSPHERE_COLOR,
+  GLOBE_ATMOSPHERE_OPACITY,
+  GLOBE_ATMOSPHERE_SCALE
+} from '../config/constants'
 
 const Globe = forwardRef<THREE.Group>((_props, ref) => {
   const colorMap = useLoader(TextureLoader, earthTexture)
-  const globeRadius = 4.7;
 
   return (
     <group ref={ref}>
-      {/* Globo terrestre principale */}
+      {/* Main Earth globe */}
       <mesh>
-        <sphereGeometry args={[globeRadius, 64, 64]} />
+        <sphereGeometry args={[GLOBE_RADIUS, GLOBE_SEGMENTS, GLOBE_SEGMENTS]} />
         <meshStandardMaterial map={colorMap} />
       </mesh>
 
-      {/* Alone blu esterno */}
-      <mesh scale={[1.01, 1.01, 1.01]}>
-        <sphereGeometry args={[globeRadius, 64, 64]} />
+      {/* Blue outer atmosphere */}
+      <mesh scale={[GLOBE_ATMOSPHERE_SCALE, GLOBE_ATMOSPHERE_SCALE, GLOBE_ATMOSPHERE_SCALE]}>
+        <sphereGeometry args={[GLOBE_RADIUS, GLOBE_SEGMENTS, GLOBE_SEGMENTS]} />
         <meshBasicMaterial
-          color="#4A90E2"
+          color={GLOBE_ATMOSPHERE_COLOR}
           transparent
-          opacity={0.1}
+          opacity={GLOBE_ATMOSPHERE_OPACITY}
           side={THREE.BackSide}
         />
       </mesh>

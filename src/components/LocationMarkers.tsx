@@ -1,5 +1,6 @@
 import { experiences } from '../data/experiences';
-import { latLonToVector3, GLOBE_RADIUS } from '../utils/coordinates';
+import { latLonToVector3 } from '../utils/coordinates';
+import { GLOBE_RADIUS } from '../config/constants';
 import { useFlightStore } from '../store/flightStore';
 import LocationMarker from './LocationMarker';
 

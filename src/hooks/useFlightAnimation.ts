@@ -1,7 +1,14 @@
 import { useRef, useEffect } from 'react';
 import { useFlightStore } from '../store/flightStore';
 import { experiences } from '../data/experiences';
-import { latLonToVector3, GLOBE_RADIUS } from '../utils/coordinates';
+import { latLonToVector3 } from '../utils/coordinates';
+import {
+  GLOBE_RADIUS,
+  FLIGHT_DURATION,
+  FLIGHT_HEIGHT_OFFSET,
+  FLIGHT_ARC_HEIGHT,
+  FLIGHT_BANK_ANGLE
+} from '../config/constants';
 import { gsap } from 'gsap';
 import * as THREE from 'three';
 
@@ -30,13 +37,13 @@ export function useFlightAnimation({
     const startPos = latLonToVector3(
       currentExp.location.coordinates.lat,
       currentExp.location.coordinates.lon,
-      GLOBE_RADIUS + 0.15 // Offset from surface
+      GLOBE_RADIUS + FLIGHT_HEIGHT_OFFSET
     );
 
     const endPos = latLonToVector3(
       nextExp.location.coordinates.lat,
       nextExp.location.coordinates.lon,
-      GLOBE_RADIUS + 0.15
+      GLOBE_RADIUS + FLIGHT_HEIGHT_OFFSET
     );
 
     // Create curved path using quadratic bezier
@@ -44,7 +51,7 @@ export function useFlightAnimation({
       .addVectors(startPos, endPos)
       .multiplyScalar(0.5)
       .normalize()
-      .multiplyScalar(GLOBE_RADIUS + 0.8); // Arc height
+      .multiplyScalar(GLOBE_RADIUS + FLIGHT_ARC_HEIGHT);
 
     const curve = new THREE.QuadraticBezierCurve3(startPos, midPoint, endPos);
 
@@ -69,7 +76,7 @@ export function useFlightAnimation({
       { t: 0 },
       {
         t: 1,
-        duration: 3, // 3 seconds flight time
+        duration: FLIGHT_DURATION,
         ease: 'power1.inOut',
         onUpdate: function () {
           const t = (this.targets()[0] as { t: number }).t;
@@ -83,7 +90,7 @@ export function useFlightAnimation({
           airplane.lookAt(nextPoint);
 
           // Tilt airplane slightly for realism (bank angle)
-          airplane.rotateZ(Math.PI * 0.1);
+          airplane.rotateZ(FLIGHT_BANK_ANGLE);
         },
       }
     );

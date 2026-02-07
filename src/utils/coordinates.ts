@@ -1,13 +1,11 @@
 import * as THREE from 'three';
-
-// Must match the radius in Globe.tsx sphereGeometry
-export const GLOBE_RADIUS = 4.7;
+import { GLOBE_RADIUS } from '../config/constants';
 
 /**
  * Converts latitude/longitude to 3D Cartesian coordinates on sphere surface
  * @param lat Latitude in degrees (-90 to 90)
  * @param lon Longitude in degrees (-180 to 180)
- * @param radius Sphere radius (default 3.7, matching Globe.tsx)
+ * @param radius Sphere radius (default from constants)
  * @returns THREE.Vector3 position on sphere surface
  */
 export function latLonToVector3(
@@ -29,24 +27,4 @@ export function latLonToVector3(
   const y = radius * Math.cos(phi);
 
   return new THREE.Vector3(x, y, z);
-}
-
-/**
- * Calculates the normal vector (outward direction) at a point on the sphere
- * Useful for orienting objects to face outward from the globe
- * @param position Position vector on the sphere
- * @returns Normalized vector pointing outward from sphere center
- */
-export function getNormalAtPoint(position: THREE.Vector3): THREE.Vector3 {
-  return position.clone().normalize();
-}
-
-/**
- * Gets the "up" direction for positioning objects on sphere surface
- * This ensures flags/markers point outward from the globe
- * @param position Position vector on the sphere
- * @returns Normalized vector pointing outward (same as normal)
- */
-export function getUpVectorAtPoint(position: THREE.Vector3): THREE.Vector3 {
-  return getNormalAtPoint(position);
 }
