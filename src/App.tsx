@@ -2,6 +2,8 @@ import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react';
 import Scene from './components/Scene';
 import DotGrid from './components/DotGrid';
+import ExperienceCard from './components/ExperienceCard';
+import FlightControls from './components/FlightControls';
 import './App.css';
 
 export default function App() {
@@ -18,12 +20,15 @@ export default function App() {
           resistance={750}
           returnDuration={1.5}
         >
-          <Canvas camera={{ position: [0, 0, 6], fov: 75 }}>
+          <Canvas camera={{ position: [0, 0, 9], fov: 75 }}>
             <Suspense fallback={null}>
               <Scene />
             </Suspense>
           </Canvas>
         </DotGrid>
+
+        <ExperienceCard />
+        <FlightControls />
       </div>
   );
 }

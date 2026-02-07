@@ -1,0 +1,52 @@
+import { create } from 'zustand';
+import { experiences } from '../data/experiences';
+
+interface FlightState {
+  currentIndex: number;
+  isPlaying: boolean;
+  isTransitioning: boolean;
+  showCard: boolean;
+
+  // Actions
+  play: () => void;
+  pause: () => void;
+  nextLocation: () => void;
+  previousLocation: () => void;
+  goToLocation: (index: number) => void;
+  setTransitioning: (value: boolean) => void;
+  setShowCard: (value: boolean) => void;
+}
+
+export const useFlightStore = create<FlightState>((set) => ({
+  currentIndex: 0,
+  isPlaying: true, // Auto-start the tour
+  isTransitioning: false,
+  showCard: false,
+
+  play: () => set({ isPlaying: true }),
+  pause: () => set({ isPlaying: false }),
+
+  nextLocation: () =>
+    set((state) => ({
+      currentIndex: (state.currentIndex + 1) % experiences.length,
+      showCard: false,
+    })),
+
+  previousLocation: () =>
+    set((state) => ({
+      currentIndex:
+        state.currentIndex === 0
+          ? experiences.length - 1
+          : state.currentIndex - 1,
+      showCard: false,
+    })),
+
+  goToLocation: (index: number) =>
+    set({
+      currentIndex: index,
+      showCard: false,
+    }),
+
+  setTransitioning: (value: boolean) => set({ isTransitioning: value }),
+  setShowCard: (value: boolean) => set({ showCard: value }),
+}));

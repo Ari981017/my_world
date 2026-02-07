@@ -1,14 +1,15 @@
+import { forwardRef } from 'react'
 import { TextureLoader } from 'three'
 import { useLoader } from '@react-three/fiber'
 import * as THREE from 'three'
 import earthTexture from '../assets/globe/8k_earth_daymap.jpg'
 
-export default function Globe() {
+const Globe = forwardRef<THREE.Group>((_props, ref) => {
   const colorMap = useLoader(TextureLoader, earthTexture)
-  const globeRadius = 2;
+  const globeRadius = 4.7;
 
   return (
-    <group>
+    <group ref={ref}>
       {/* Globo terrestre principale */}
       <mesh>
         <sphereGeometry args={[globeRadius, 64, 64]} />
@@ -27,4 +28,8 @@ export default function Globe() {
       </mesh>
     </group>
   );
-}
+});
+
+Globe.displayName = 'Globe';
+
+export default Globe;

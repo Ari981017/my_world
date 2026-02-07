@@ -1,12 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import Globe from './Globe';
 import Lighting from './Lighting';
+import Airplane from './Airplane';
+import LocationMarkers from './LocationMarkers';
+import { useFlightAnimation } from '../hooks/useFlightAnimation';
+import { useFlightStore } from '../store/flightStore';
 
 export default function Scene() {
   const { camera } = useThree();
+  const globeRef = useRef<THREE.Group>(null!);
+  const airplaneRef = useRef<{ group: THREE.Group | null }>({ group: null });
+  const isTransitioning = useFlightStore((state) => state.isTransitioning);
+
+  // Initialize flight animation system
+  useFlightAnimation({ airplaneRef, globeRef });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -34,13 +44,25 @@ export default function Scene() {
         case '+':
         case '=':
           // Zoom in (avvicina)
-          spherical.radius = Math.max(2.2, spherical.radius - zoomSpeed);
+          spherical.radius = Math.max(5.0, spherical.radius - zoomSpeed);
           break;
         case '-':
         case '_':
           // Zoom out (allontana)
           spherical.radius = Math.min(50, spherical.radius + zoomSpeed);
           break;
+        case ' ':
+          {
+            // Spacebar to toggle play/pause
+            e.preventDefault();
+            const { isPlaying, play, pause } = useFlightStore.getState();
+            if (isPlaying) {
+              pause();
+            } else {
+              play();
+            }
+            return;
+          }
         default:
           return;
       }
@@ -62,15 +84,22 @@ export default function Scene() {
       <Lighting />
 
       {/* Globo controllabile con mouse e tastiera */}
-      <Globe />
+      <Globe ref={globeRef} />
+
+      {/* Airplane that flies between locations */}
+      <Airplane ref={airplaneRef} />
+
+      {/* Animated flag markers at each location */}
+      <LocationMarkers />
 
       {/* Controlli mouse per ruotare e zoomare */}
       <OrbitControls
         enablePan={false}
         enableZoom={true}
-        minDistance={2.2}
+        minDistance={5.0}
         maxDistance={50}
         zoomSpeed={1.5}
+        enabled={!isTransitioning}
       />
     </>
   );
