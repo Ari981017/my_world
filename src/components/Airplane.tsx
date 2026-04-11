@@ -22,6 +22,7 @@ interface AirplaneProps {
 const Airplane = forwardRef<AirplaneHandle, AirplaneProps>(
   ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = AIRPLANE_SCALE }, ref) => {
     const groupRef = useRef<THREE.Group>(null);
+    const basePosRef = useRef(new THREE.Vector3());
     const { scene } = useGLTF('/models/airplane.glb');
     const isTransitioning = useFlightStore((state) => state.isTransitioning);
 
@@ -34,17 +35,12 @@ const Airplane = forwardRef<AirplaneHandle, AirplaneProps>(
       if (groupRef.current) {
         const time = state.clock.getElapsedTime();
 
-        // Store current position (set by flight animation)
-        const currentX = groupRef.current.position.x;
-        const currentY = groupRef.current.position.y;
-        const currentZ = groupRef.current.position.z;
-
-        // Calculate subtle vertical oscillation
-        const offset = Math.sin(time * AIRPLANE_BOBBING_FREQUENCY) * AIRPLANE_BOBBING_AMPLITUDE;
-
         // Only apply bobbing during active flight animation
         if (isTransitioning) {
-          groupRef.current.position.set(currentX, currentY + offset, currentZ);
+          // Snapshot the base position set by GSAP this frame, then apply offset on top
+          basePosRef.current.copy(groupRef.current.position);
+          const offset = Math.sin(time * AIRPLANE_BOBBING_FREQUENCY) * AIRPLANE_BOBBING_AMPLITUDE;
+          groupRef.current.position.y = basePosRef.current.y + offset;
         }
       }
     });

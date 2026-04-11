@@ -100,7 +100,7 @@ export default function LocationMarker({
         loadingRef.current = false;
       }
     );
-  }, [countryCode, flagTexture]);
+  }, [countryCode]);
 
   // Pulse effect when active
   useFrame((state) => {

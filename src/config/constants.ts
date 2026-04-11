@@ -36,6 +36,10 @@ export const CAMERA_PHI_SPEED = 0.05;
 export const CAMERA_PHI_MIN = 0.1;
 export const CAMERA_PHI_MAX = Math.PI - 0.1;
 
+// Camera flight-follow animation
+export const CAMERA_ZOOM_SCALE_FACTOR = 5; // extra camera distance per radian of arc
+export const CAMERA_MIN_EXTRA_ZOOM = 1.5;  // minimum extra zoom even for short hops
+
 // Lighting configuration
 export const AMBIENT_LIGHT_INTENSITY = 1.5;
 export const DIRECTIONAL_LIGHT_INTENSITY = 0.5;

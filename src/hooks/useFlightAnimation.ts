@@ -127,7 +127,7 @@ export function useFlightAnimation({
     return () => {
       tl.kill();
     };
-  }, [currentIndex, previousIndex, airplaneRef, globeRef, isPlaying, setTransitioning, setShowCard]);
+  }, [currentIndex, previousIndex, airplaneRef, globeRef, setTransitioning, setShowCard]);
 
   // Handle play/pause
   useEffect(() => {
