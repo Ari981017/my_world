@@ -7,6 +7,7 @@ import Lighting from './Lighting';
 import Airplane from './Airplane';
 import LocationMarkers from './LocationMarkers';
 import { useFlightAnimation } from '../hooks/useFlightAnimation';
+import { useCameraFlightFollow } from '../hooks/useCameraFlightFollow';
 import { useFlightStore } from '../store/flightStore';
 import {
   CAMERA_ROTATION_SPEED,
@@ -26,6 +27,7 @@ export default function Scene() {
 
   // Initialize flight animation system
   useFlightAnimation({ airplaneRef, globeRef });
+  useCameraFlightFollow({ camera });
 
   // Memoize keyboard handler to prevent recreating on every render
   const handleKeyDown = useCallback((e: KeyboardEvent) => {

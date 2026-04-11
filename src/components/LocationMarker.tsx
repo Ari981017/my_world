@@ -3,8 +3,6 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Text } from '@react-three/drei';
 import {
-  MARKER_POLE_HEIGHT,
-  MARKER_POLE_RADIUS,
   MARKER_FLAG_WIDTH,
   MARKER_FLAG_HEIGHT,
   MARKER_LABEL_SIZE,
@@ -32,7 +30,6 @@ export default function LocationMarker({
   isActive = false,
 }: LocationMarkerProps) {
   const groupRef = useRef<THREE.Group>(null);
-  const flagRef = useRef<THREE.Mesh>(null);
   const [flagTexture, setFlagTexture] = useState<THREE.Texture | null>(null);
   const loadingRef = useRef(false);
 
@@ -43,10 +40,7 @@ export default function LocationMarker({
     // Check cache first
     if (flagTextureCache.has(code)) {
       const cachedTexture = flagTextureCache.get(code)!;
-      if (flagTexture !== cachedTexture) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setFlagTexture(cachedTexture);
-      }
+      setFlagTexture(cachedTexture);
       return;
     }
 
@@ -61,15 +55,12 @@ export default function LocationMarker({
 
     loader.load(
       flagUrl,
-      // Success
       (texture) => {
         flagTextureCache.set(code, texture);
         setFlagTexture(texture);
         loadingRef.current = false;
       },
-      // Progress (optional)
       undefined,
-      // Error
       (error) => {
         console.warn(`Failed to load flag for ${countryCode}:`, error);
         flagTextureCache.set(code, null);
@@ -80,14 +71,12 @@ export default function LocationMarker({
         canvas.height = 120;
         const ctx = canvas.getContext('2d');
         if (ctx) {
-          // Gradient fallback
           const gradient = ctx.createLinearGradient(0, 0, 160, 120);
           gradient.addColorStop(0, '#4A90E2');
           gradient.addColorStop(1, '#2C5F8D');
           ctx.fillStyle = gradient;
           ctx.fillRect(0, 0, 160, 120);
 
-          // Add country code text
           ctx.fillStyle = 'white';
           ctx.font = 'bold 40px sans-serif';
           ctx.textAlign = 'center';
@@ -112,22 +101,17 @@ export default function LocationMarker({
     }
   });
 
-  // Calculate orientation to face outward from globe
+  // Orient the group so local Z (plane normal) points outward from globe center
+  // This makes a default PlaneGeometry (XY plane, normal=Z) lie flat on the surface
   const normal = position.clone().normalize();
-  const up = new THREE.Vector3(0, 1, 0);
-  const quaternion = new THREE.Quaternion().setFromUnitVectors(up, normal);
+  const forward = new THREE.Vector3(0, 0, 1);
+  const quaternion = new THREE.Quaternion().setFromUnitVectors(forward, normal);
 
   return (
     <group ref={groupRef} position={position} quaternion={quaternion}>
-      {/* Flag pole */}
-      <mesh position={[0, MARKER_POLE_HEIGHT / 2, 0]}>
-        <cylinderGeometry args={[MARKER_POLE_RADIUS, MARKER_POLE_RADIUS, MARKER_POLE_HEIGHT, 8]} />
-        <meshStandardMaterial color="#333" />
-      </mesh>
-
-      {/* Flag cloth with country texture */}
+      {/* Flag laid flat on the globe surface, face pointing outward */}
       {flagTexture && (
-        <mesh ref={flagRef} position={[MARKER_FLAG_WIDTH / 2, MARKER_POLE_HEIGHT * 0.833, 0]}>
+        <mesh position={[0, 0, 0.02]}>
           <planeGeometry args={[MARKER_FLAG_WIDTH, MARKER_FLAG_HEIGHT]} />
           <meshStandardMaterial
             map={flagTexture}
@@ -138,24 +122,24 @@ export default function LocationMarker({
         </mesh>
       )}
 
-      {/* Label */}
+      {/* Label above the flag */}
       <Text
-        position={[0, MARKER_POLE_HEIGHT + MARKER_FLAG_HEIGHT, 0]}
+        position={[0, 0, 0.15]}
         fontSize={MARKER_LABEL_SIZE}
         color="white"
         anchorX="center"
         anchorY="bottom"
-        outlineWidth={0.002}
+        outlineWidth={0.003}
         outlineColor="#000"
       >
         {label}
       </Text>
 
-      {/* Glowing base when active */}
+      {/* Glowing dot when active */}
       {isActive && (
-        <mesh position={[0, 0.01, 0]}>
+        <mesh position={[0, 0, 0.01]}>
           <sphereGeometry args={[MARKER_GLOW_SIZE, 16, 16]} />
-          <meshBasicMaterial color={MARKER_GLOW_COLOR} transparent opacity={0.6} />
+          <meshBasicMaterial color={MARKER_GLOW_COLOR} transparent opacity={0.8} />
         </mesh>
       )}
     </group>

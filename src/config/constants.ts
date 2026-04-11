@@ -19,9 +19,9 @@ export const AIRPLANE_BOBBING_AMPLITUDE = 0.02;
 // Marker configuration
 export const MARKER_POLE_HEIGHT = 0.3;
 export const MARKER_POLE_RADIUS = 0.005;
-export const MARKER_FLAG_WIDTH = 0.12;
-export const MARKER_FLAG_HEIGHT = 0.08;
-export const MARKER_LABEL_SIZE = 0.04;
+export const MARKER_FLAG_WIDTH = 0.30;
+export const MARKER_FLAG_HEIGHT = 0.20;
+export const MARKER_LABEL_SIZE = 0.06;
 export const MARKER_PULSE_FREQUENCY = 4;
 export const MARKER_PULSE_AMPLITUDE = 0.1;
 export const MARKER_GLOW_SIZE = 0.03;
