@@ -1,3 +1,4 @@
+import { FaTimes } from 'react-icons/fa';
 import { useFlightStore } from '../store/flightStore';
 import { experiences } from '../data/experiences';
 import { UI_TEXT } from '../config/constants';
@@ -5,14 +6,12 @@ import './ExperienceCard.css';
 
 export default function ExperienceCard() {
   const { currentIndex, showCard } = useFlightStore();
-
   if (!showCard) return null;
 
   const exp = experiences[currentIndex];
 
   const formatPeriod = (start: string, end: string): string => {
     try {
-      // Validate date format (YYYY-MM)
       const datePattern = /^\d{4}-\d{2}$/;
       if (!datePattern.test(start)) {
         console.error(`Invalid start date format: ${start}`);
@@ -21,7 +20,6 @@ export default function ExperienceCard() {
 
       const startDate = new Date(start + '-01');
 
-      // Check if date is valid
       if (isNaN(startDate.getTime())) {
         console.error(`Invalid start date: ${start}`);
         return 'Invalid date range';
@@ -66,7 +64,7 @@ export default function ExperienceCard() {
         onClick={() => useFlightStore.getState().setShowCard(false)}
         aria-label={UI_TEXT.close}
       >
-        ×
+        <FaTimes />
       </button>
 
       {/* Location Header */}
@@ -79,77 +77,57 @@ export default function ExperienceCard() {
         <h2 className="location-name">{exp.location.name}</h2>
       </div>
 
-      {/* VIAGGIO Section */}
-      <div className="section viaggio-section">
-        <div className="section-header">
-          <span className="section-icon">🌍</span>
-          <h3>VIAGGIO</h3>
-        </div>
-        <p className="travel-description">{exp.viaggio.description}</p>
 
-        {exp.viaggio.visitDate && (
-          <p className="visit-info">
-            <strong>Periodo visita:</strong> {exp.viaggio.visitDate}
-          </p>
-        )}
+      {(
+        <div className="section lavoro-section">
+          <div className="work-meta">
+            <h4 className="job-title">{exp.lavoro.jobTitle}</h4>
+            {exp.lavoro.company && (
+              <p className="company">{exp.lavoro.company}</p>
+            )}
+            {(exp.lavoro.periodLabel ?? formatPeriod(exp.lavoro.period.start, exp.lavoro.period.end)) && (
+              <p className="period">
+                {exp.lavoro.periodLabel ?? formatPeriod(exp.lavoro.period.start, exp.lavoro.period.end)}
+              </p>
+            )}
+          </div>
 
-        {exp.viaggio.visitDuration && (
-          <p className="visit-info">
-            <strong>Durata:</strong> {exp.viaggio.visitDuration}
-          </p>
-        )}
-
-        {exp.viaggio.highlights && exp.viaggio.highlights.length > 0 && (
-          <ul className="travel-highlights">
-            {exp.viaggio.highlights.map((h, i) => (
-              <li key={i}>{h}</li>
+          <div className="technologies">
+            {exp.lavoro.technologies.map((tech) => (
+              <span key={tech} className="tech-badge">
+                {tech}
+              </span>
             ))}
-          </ul>
-        )}
+          </div>
 
-        {exp.viaggio.tripType && (
-          <p className="trip-type">
-            <em>{exp.viaggio.tripType}</em>
-          </p>
-        )}
-      </div>
+          {exp.lavoro.video && (
+            <div className="work-video">
+              <video
+                src={exp.lavoro.video}
+                controls
+                muted
+                playsInline
+                preload="metadata"
+                className="work-video-player"
+              />
+            </div>
+          )}
 
-      {/* LAVORO Section */}
-      <div className="section lavoro-section">
-        <div className="section-header">
-          <span className="section-icon">💼</span>
-          <h3>LAVORO</h3>
+          <p className="work-description">{exp.lavoro.description}</p>
+
+          <div className="responsibilities">
+            <h5>{UI_TEXT.keyResponsibilities}</h5>
+            <ul>
+              {exp.lavoro.responsibilities.map((resp, idx) => (
+                <li key={idx}>{resp}</li>
+              ))}
+            </ul>
+          </div>
         </div>
+      )}
 
-        <div className="work-meta">
-          <h4 className="job-title">{exp.lavoro.jobTitle}</h4>
-          <p className="company">{exp.lavoro.company}</p>
-          <p className="period">
-            {formatPeriod(exp.lavoro.period.start, exp.lavoro.period.end)}
-          </p>
-        </div>
 
-        <div className="technologies">
-          {exp.lavoro.technologies.map((tech) => (
-            <span key={tech} className="tech-badge">
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        <p className="work-description">{exp.lavoro.description}</p>
-
-        <div className="responsibilities">
-          <h5>{UI_TEXT.keyResponsibilities}</h5>
-          <ul>
-            {exp.lavoro.responsibilities.map((resp, idx) => (
-              <li key={idx}>{resp}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Continue button to advance to next location */}
+      {/* Continue button */}
       <div className="card-actions">
         <button
           className="continue-button"

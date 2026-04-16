@@ -9,6 +9,8 @@ import LocationMarkers from './LocationMarkers';
 import { useFlightAnimation } from '../hooks/useFlightAnimation';
 import { useCameraFlightFollow } from '../hooks/useCameraFlightFollow';
 import { useFlightStore } from '../store/flightStore';
+import { experiences } from '../data/experiences';
+import { latLonToVector3 } from '../utils/coordinates';
 import {
   CAMERA_ROTATION_SPEED,
   CAMERA_PHI_SPEED,
@@ -28,6 +30,19 @@ export default function Scene() {
   // Initialize flight animation system
   useFlightAnimation({ airplaneRef, globeRef });
   useCameraFlightFollow({ camera });
+
+  // Position camera to face the first location on mount
+  useEffect(() => {
+    const first = experiences[0];
+    const dir = latLonToVector3(
+      first.location.coordinates.lat,
+      first.location.coordinates.lon,
+      1
+    ).normalize();
+    const distance = camera.position.length();
+    camera.position.copy(dir.multiplyScalar(distance));
+    camera.lookAt(0, 0, 0);
+  }, [camera]);
 
   // Memoize keyboard handler to prevent recreating on every render
   const handleKeyDown = useCallback((e: KeyboardEvent) => {

@@ -1,7 +1,5 @@
 import type { Experience } from '../types/experience';
 
-// Arianna Toniolo's CV - Real work experiences and skills mapped to places visited
-
 export const experiences: Experience[] = [
   {
     id: "exp-1",
@@ -25,15 +23,15 @@ export const experiences: Experience[] = [
       company: "Esosphera",
       jobTitle: "Full Stack Developer",
       period: { start: "2022-11", end: "present" },
-      technologies: ["PHP", "Yii2", "PostgreSQL", "Vue.js", "API RESTful", "Swagger", "PHPUnit"],
-      description: "Sviluppo e manutenzione di applicazioni web con focus su integrazione API esterne e ottimizzazione delle performance.",
+      technologies: ["PHP", "Yii2", "Node.js", "TypeScript", "Vue 3", "PostgreSQL", "REST APIs"],
+      description: "Sviluppo di applicazioni web aziendali scalabili presso una software house specializzata in soluzioni enterprise. Ruolo full stack tra backend PHP/Node.js e frontend Vue 3, con forte focus su qualità del codice, integrazione API e architetture modulari.",
       responsibilities: [
-        "Sviluppo applicazioni web con PHP/Yii2 e PostgreSQL",
+        "Progettazione e sviluppo backend con PHP/Yii2, Node.js e TypeScript",
+        "Realizzazione interfacce dinamiche con Vue 3",
         "Integrazione API esterne (WhatsApp, SMS, Email)",
-        "Sviluppo nodi personalizzati in FlowDesigner",
-        "Ottimizzazione query SQL riducendo i tempi di risposta API",
-        "Documentazione e testing API con Swagger e PHPUnit",
-        "Collaborazione cross-team con designer e project manager"
+        "Implementazione autenticazione JWT e autorizzazione basata su ruoli (RBAC)",
+        "Documentazione API con Swagger e testing con PHPUnit",
+        "Collaborazione cross-team in metodologia Agile per rilasci iterativi"
       ]
     }
   },
@@ -56,18 +54,21 @@ export const experiences: Experience[] = [
       tripType: "[Da compilare]"
     },
     lavoro: {
-      company: "Esosphera",
-      jobTitle: "Vue.js Project - Modulo Multicanale",
+      company: "",
+      jobTitle: "Frontend Lead — Modulo Multicanale",
       period: { start: "2022-11", end: "present" },
-      technologies: ["Vue.js 3", "Yii2", "Pinia", "Vee-Validate", "API RESTful"],
-      description: "Sviluppo wizard multicanale per campagne marketing integrate con API esterne.",
+      periodLabel: "Progetto",
+      technologies: ["Vue 3", "Yii2", "Pinia", "Vee-Validate", "REST APIs", "JavaScript"],
+      description: "Sviluppo del wizard di configurazione per campagne marketing omnicanale, uno degli strumenti core della piattaforma. Gestione dell'intero ciclo frontend: architettura dei componenti, validazioni, state management e ottimizzazione UX per flussi complessi.",
       responsibilities: [
-        "Creazione wizard per Email, SMS, WhatsApp, Telefono",
-        "Integrazione con API esterne per gestione multicanale",
-        "Ottimizzazione usabilità e prestazioni",
-        "State management con Pinia",
-        "Validazione form avanzata con Vee-Validate"
-      ]
+        "Wizard avanzato per configurare campagne Email, SMS, WhatsApp e Telefono",
+        "Architettura componenti Vue 3 riutilizzabili e scalabili",
+        "State management con Pinia per flussi multi-step",
+        "Validazione dinamica form con Vee-Validate",
+        "Integrazione con API backend per la gestione campagne",
+        "Performance tuning frontend per ridurre la latenza percepita"
+      ],
+      video: "/omnichannel_campaign_configuration.mp4"
     }
   },
   {
@@ -92,21 +93,22 @@ export const experiences: Experience[] = [
       company: "Previnet S.p.A.",
       jobTitle: "Back-End Developer",
       period: { start: "2022-07", end: "2022-09" },
-      technologies: ["Perl", "MySQL", "Linux"],
-      description: "Sviluppo e manutenzione applicazioni backend con focus su modularità e scalabilità.",
+      technologies: ["Perl", "MySQL", "Linux", "SQL"],
+      description: "Sviluppo e refactoring di applicazioni backend legacy per un'azienda nel settore previdenziale. Focus su robustezza del codice, ottimizzazione database e collaborazione con team QA per il rilascio in produzione.",
       responsibilities: [
-        "Sviluppo e manutenzione applicazioni in Perl",
-        "Gestione e ottimizzazione database MySQL",
-        "Implementazione moduli scalabili e modulari",
-        "Debug e risoluzione problemi backend"
+        "Sviluppo e manutenzione applicazioni backend in Perl",
+        "Refactoring codice legacy per migliorare leggibilità e robustezza",
+        "Ottimizzazione query MySQL e struttura del database",
+        "Progettazione moduli riutilizzabili con documentazione tecnica",
+        "Collaborazione con team QA e operations per deployment e monitoraggio"
       ]
     }
   },
   {
     id: "exp-4",
     location: {
-      name: "Mumbai, India",
-      coordinates: { lat: 19.0760, lon: 72.8777 }
+      name: "New Delhi, India",
+      coordinates: { lat: 28.6139, lon: 77.2090 }
     },
     countryCode: "IN",
     viaggio: {
@@ -121,17 +123,19 @@ export const experiences: Experience[] = [
       tripType: "[Da compilare]"
     },
     lavoro: {
-      company: "Skills Focus",
-      jobTitle: "API & Documentation Specialist",
-      period: { start: "2022-11", end: "present" },
-      technologies: ["Swagger", "PHPUnit", "API RESTful", "AWS S3", "Postman"],
-      description: "Specializzazione in documentazione API, testing e integrazione servizi cloud.",
+      company: "",
+      jobTitle: "Software Architect — Flow Engine AI",
+      period: { start: "2023-01", end: "present" },
+      periodLabel: "Progetto",
+      technologies: ["Node.js", "TypeScript", "XState v5", "Redis", "Microservices", "REST APIs"],
+      description: "Progettazione e sviluppo del runtime conversazionale AI-driven, il progetto architetturalmente più complesso della piattaforma. Basato su Finite State Machines con XState v5 in architettura a microservizi, gestisce l'intera logica di esecuzione dei flussi conversazionali.",
       responsibilities: [
-        "Documentazione API RESTful con Swagger",
-        "Testing automatizzato con PHPUnit",
-        "Integrazione AWS S3 per gestione file",
-        "Ottimizzazione performance API",
-        "Validazione endpoint con Postman"
+        "Architettura a microservizi per il runtime conversazionale AI",
+        "Compilazione dinamica di Flow JSON in FSM con XState v5",
+        "Snapshot persistence e resume delle conversazioni su Redis",
+        "Memory model 3-hash con priorità deterministica",
+        "Esposizione di API runtime versionate",
+        "Riduzione tempi di risposta del 40% tramite ottimizzazione microservizi"
       ]
     }
   },
@@ -154,24 +158,26 @@ export const experiences: Experience[] = [
       tripType: "[Da compilare]"
     },
     lavoro: {
-      company: "Esosphera",
-      jobTitle: "FlowDesigner Project - Automazione",
+      company: "",
+      jobTitle: "API & Integration Specialist",
       period: { start: "2022-11", end: "present" },
-      technologies: ["FlowDesigner", "PHP", "JavaScript", "PostgreSQL"],
-      description: "Creazione nodi personalizzati per automazione flussi aziendali complessi.",
+      periodLabel: "",
+      technologies: ["REST APIs", "Swagger", "PHPUnit", "AWS S3", "WhatsApp API", "Postman"],
+      description: "Integrazione di canali di comunicazione esterni nella piattaforma enterprise e definizione degli standard di qualità API. Responsabile della documentazione tecnica e del testing automatizzato degli endpoint.",
       responsibilities: [
-        "Sviluppo nodi personalizzati FlowDesigner",
-        "Automazione flussi aziendali complessi",
-        "Integrazione con sistemi esistenti",
-        "Testing e validazione nodi custom",
-        "Documentazione tecnica per utenti finali"
+        "Integrazione API WhatsApp Business, SMS provider ed Email transazionali",
+        "Documentazione API RESTful con Swagger/OpenAPI",
+        "Testing automatizzato endpoint con PHPUnit",
+        "Gestione file e asset su AWS S3",
+        "Definizione standard interni per qualità e manutenibilità API",
+        "Validazione contratti API con Postman"
       ]
     }
   },
   {
     id: "exp-6",
     location: {
-      name: "Las Palmas, Canary Islands",
+      name: "Canary Islands",
       coordinates: { lat: 28.1235, lon: -15.4363 }
     },
     countryCode: "ES",
@@ -187,17 +193,19 @@ export const experiences: Experience[] = [
       tripType: "[Da compilare]"
     },
     lavoro: {
-      company: "Skills Focus",
-      jobTitle: "Database Expert",
-      period: { start: "2022-07", end: "present" },
-      technologies: ["PostgreSQL", "MySQL", "Redis", "Sybase SQL"],
-      description: "Gestione, ottimizzazione e design di database relazionali e NoSQL.",
+      company: "",
+      jobTitle: "Database & Performance Engineer",
+      period: { start: "2022-11", end: "present" },
+      periodLabel: "",
+      technologies: ["PostgreSQL", "MySQL", "Redis", "Sybase", "SQL"],
+      description: "Ottimizzazione delle performance database sull'intera piattaforma enterprise. Interventi su query critiche, indexing e caching che hanno portato a un miglioramento del 35% nelle performance applicative complessive.",
       responsibilities: [
-        "Design e ottimizzazione schema database",
-        "Query optimization per performance",
-        "Implementazione caching con Redis",
-        "Gestione migrazioni database",
-        "Backup e disaster recovery"
+        "Analisi e riscrittura query SQL critiche per ridurre i tempi di risposta",
+        "Miglioramento performance del 35% tramite ottimizzazione PostgreSQL",
+        "Implementazione layer di caching con Redis",
+        "Refactoring degli schemi database per scalabilità",
+        "Gestione migrazioni con zero downtime",
+        "Supporto a database Sybase in contesti legacy"
       ]
     }
   },
@@ -220,17 +228,19 @@ export const experiences: Experience[] = [
       tripType: "[Da compilare]"
     },
     lavoro: {
-      company: "Skills Focus",
-      jobTitle: "Testing & Quality Assurance",
+      company: "",
+      jobTitle: "QA & Testing Specialist",
       period: { start: "2022-11", end: "present" },
-      technologies: ["PHPUnit", "Acceptance Testing", "Swagger", "Postman"],
-      description: "Focus su testing automatizzato e quality assurance per garantire stabilità del codice.",
+      periodLabel: "",
+      technologies: ["PHPUnit", "Jest", "Swagger", "Postman", "CI/CD"],
+      description: "Presidio della qualità del codice attraverso testing automatizzato integrato nel ciclo Agile. Riferimento del team per standard di test, code coverage e processi di quality assurance end-to-end.",
       responsibilities: [
-        "Implementazione test unitari con PHPUnit",
-        "Acceptance testing su funzionalità complete",
-        "Testing API con Postman e Swagger",
-        "Code coverage analysis",
-        "Integrazione testing nel CI/CD pipeline"
+        "Test unitari e di integrazione con PHPUnit",
+        "Testing frontend con Jest",
+        "Validazione e testing API con Swagger e Postman",
+        "Analisi code coverage e individuazione aree critiche",
+        "Integrazione test nel pipeline CI/CD",
+        "Definizione best practice di testing per il team"
       ]
     }
   },
@@ -253,17 +263,19 @@ export const experiences: Experience[] = [
       tripType: "[Da compilare]"
     },
     lavoro: {
-      company: "Skills Focus",
-      jobTitle: "Frontend Specialist",
+      company: "",
+      jobTitle: "Frontend Developer — Vue 3",
       period: { start: "2022-11", end: "present" },
-      technologies: ["Vue.js 3", "JavaScript", "Bootstrap", "Froala Editor", "Pinia"],
-      description: "Sviluppo interfacce moderne e responsive con Vue.js e librerie UI avanzate.",
+      periodLabel: "",
+      technologies: ["Vue 3", "JavaScript", "Pinia", "Bootstrap", "Froala Editor"],
+      description: "Sviluppo delle interfacce utente della piattaforma enterprise con Vue 3. Focus su componenti riutilizzabili, esperienza utente fluida e performance lato client.",
       responsibilities: [
-        "Sviluppo componenti Vue.js riutilizzabili",
-        "Integrazione Froala Editor per rich text",
-        "State management con Pinia",
-        "Design responsive con Bootstrap",
-        "Ottimizzazione bundle size e performance"
+        "Sviluppo componenti Vue 3 modulari e riutilizzabili",
+        "Integrazione Froala Editor per funzionalità rich text",
+        "State management con Pinia per applicazioni multi-modulo",
+        "UI responsive con Bootstrap",
+        "Ottimizzazione bundle size e caricamento asincrono dei moduli",
+        "Implementazione UI fedeli ai mockup in collaborazione con i designer"
       ]
     }
   },
@@ -286,18 +298,19 @@ export const experiences: Experience[] = [
       tripType: "[Da compilare]"
     },
     lavoro: {
-      company: "Skills Focus",
-      jobTitle: "DevOps & Tools Expert",
-      period: { start: "2021-10", end: "present" },
-      technologies: ["Git", "GitHub", "GitLab", "Jira", "AWS S3", "Linux", "Agile/SCRUM"],
-      description: "Gestione versioning, collaborazione team e metodologie agile per delivery efficiente.",
+      company: "",
+      jobTitle: "Tech Lead — Architettura & DevOps",
+      period: { start: "2022-11", end: "present" },
+      periodLabel: "",
+      technologies: ["Node.js", "Express", "JWT", "AWS S3", "GitLab", "GitHub", "Jira", "Agile/SCRUM"],
+      description: "Presidio dell'architettura applicativa e dei processi di sviluppo. Responsabile di sicurezza, versionamento e metodologia Agile nei progetti della piattaforma enterprise.",
       responsibilities: [
-        "Gestione repository Git (GitHub/GitLab)",
-        "Configurazione CI/CD pipeline",
-        "Project management con Jira",
-        "Implementazione metodologie Agile/SCRUM",
-        "Gestione cloud storage con AWS S3",
-        "Amministrazione server Linux"
+        "Implementazione microservizi RESTful con Node.js ed Express",
+        "Sicurezza applicativa: autenticazione JWT e sistemi RBAC",
+        "Gestione repository Git con GitLab e GitHub",
+        "Cloud storage e gestione asset con AWS S3",
+        "Facilitazione processi Agile/SCRUM con Jira",
+        "Code review e mentoring tecnico del team"
       ]
     }
   }

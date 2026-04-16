@@ -20,7 +20,7 @@ interface FlightState {
   startTour: () => void;
 }
 
-export const useFlightStore = create<FlightState>((set) => ({
+export const useFlightStore = create<FlightState>((set, get) => ({
   currentIndex: 0,
   previousIndex: null,
   isPlaying: false,
@@ -28,7 +28,19 @@ export const useFlightStore = create<FlightState>((set) => ({
   showCard: false,
   hasStarted: false,
 
-  play: () => set({ isPlaying: true }),
+  play: () => {
+    const { previousIndex, currentIndex } = get();
+    if (previousIndex === currentIndex) {
+      // No active animation — advance to next location to kick off flight
+      set((state) => ({
+        currentIndex: (state.currentIndex + 1) % experiences.length,
+        showCard: false,
+        isPlaying: true,
+      }));
+    } else {
+      set({ isPlaying: true });
+    }
+  },
   pause: () => set({ isPlaying: false }),
 
   nextLocation: () =>

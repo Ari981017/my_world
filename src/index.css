@@ -1,7 +1,18 @@
+:root {
+  --color-accent: #f59e0b;
+  --color-bg: #07080e;
+  --color-text: #f1f5f9;
+  --color-text-muted: #64748b;
+  --color-border: rgba(241, 245, 249, 0.08);
+  --color-surface: rgba(12, 14, 24, 0.94);
+}
+
 html,
 body {
   margin: 0;
   overflow: hidden;
+  font-family: 'Space Grotesk', sans-serif;
+  background-color: var(--color-bg);
 }
 
 .App {

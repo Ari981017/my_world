@@ -16,6 +16,8 @@ export interface WorkInfo {
   technologies: string[];
   description: string;
   responsibilities: string[];
+  periodLabel?: string; // sovrascrive la data formattata (es. "Progetto", "Freelance")
+  video?: string;       // path relativo a /public (es. "/my_video.mp4")
 }
 
 export interface Experience {

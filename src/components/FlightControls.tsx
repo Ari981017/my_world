@@ -13,11 +13,14 @@ export default function FlightControls() {
     currentIndex,
     isPlaying,
     isTransitioning,
+    hasStarted,
     play,
     pause,
     nextLocation,
     previousLocation,
   } = useFlightStore();
+
+  if (!hasStarted) return null;
 
   return (
     <div className="flight-controls">

@@ -1,11 +1,18 @@
 import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react';
+import { useProgress } from '@react-three/drei';
 import Scene from './components/Scene';
 import DotGrid from './components/DotGrid';
 import WelcomeCard from './components/WelcomeCard';
 import ExperienceCard from './components/ExperienceCard';
 import FlightControls from './components/FlightControls';
+import LoadingScreen from './components/LoadingScreen';
 import './App.css';
+
+function LoadingOverlay() {
+  const { active } = useProgress();
+  return active ? <LoadingScreen /> : null;
+}
 
 export default function App() {
   return (
@@ -13,8 +20,8 @@ export default function App() {
         <DotGrid
           dotSize={5}
           gap={15}
-          baseColor="#110d21"
-          activeColor="#ff9b29"
+          baseColor="#07080e"
+          activeColor="#f59e0b"
           proximity={120}
           shockRadius={250}
           shockStrength={5}
@@ -27,6 +34,7 @@ export default function App() {
           </Canvas>
         </DotGrid>
 
+        <LoadingOverlay />
         <WelcomeCard />
         <ExperienceCard />
         <FlightControls />

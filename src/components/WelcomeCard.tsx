@@ -15,19 +15,12 @@ export default function WelcomeCard() {
         <p className="welcome-subtitle">Full Stack Developer</p>
 
         <div className="welcome-description">
-          <p>
-            Benvenuto nel mio portfolio interattivo! Sono una Full Stack Developer
-            con oltre 4 anni di esperienza nello sviluppo di applicazioni web.
-          </p>
-          <p>
-            Specializzata in sviluppo back-end con PHP, JavaScript (Vue.js, Node.js)
-            e integrazione di API RESTful complesse. Appassionata di tecnologia,
-            problem solving e innovazione.
-          </p>
-          <p>
-            Questo viaggio interattivo ti porterà attraverso le mie esperienze
-            professionali in giro per il mondo. Clicca sul pulsante qui sotto per iniziare!
-          </p>
+          <p>Full Stack Developer con 5 anni di esperienza su applicazioni web aziendali scalabili.</p>
+          <ul className="welcome-bullets">
+            <li>PHP, TypeScript, Vue 3, Node.js, PostgreSQL</li>
+            <li>Architetture a microservizi, API REST, automazione flussi</li>
+            <li>AWS S3, Redis, Agile — orientata alla qualità del codice</li>
+          </ul>
         </div>
 
         <button

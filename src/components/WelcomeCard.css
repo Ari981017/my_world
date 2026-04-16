@@ -3,9 +3,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(17, 13, 33, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 155, 41, 0.3);
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
   border-radius: 16px;
   padding: 40px;
   max-width: 600px;
@@ -14,13 +14,13 @@
   overflow-y: auto;
   z-index: 1000;
   animation: fadeInScale 0.6s ease-out;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(241, 245, 249, 0.05);
 }
 
 @keyframes fadeInScale {
   from {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.9);
+    transform: translate(-50%, -50%) scale(0.95);
   }
   to {
     opacity: 1;
@@ -35,16 +35,17 @@
 .welcome-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #ff9b29;
+  color: var(--color-accent);
   margin: 0 0 8px 0;
   letter-spacing: 1px;
 }
 
 .welcome-subtitle {
   font-size: 1.2rem;
-  color: #ddd;
+  color: var(--color-text);
   margin: 0 0 30px 0;
   font-weight: 300;
+  opacity: 0.7;
 }
 
 .welcome-description {
@@ -53,34 +54,59 @@
 }
 
 .welcome-description p {
-  color: #ddd;
+  color: var(--color-text);
   line-height: 1.7;
   margin: 0 0 16px 0;
   font-size: 1rem;
+  opacity: 0.85;
 }
 
 .welcome-description p:last-child {
   margin-bottom: 0;
 }
 
+.welcome-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0 0;
+  text-align: left;
+}
+
+.welcome-bullets li {
+  color: var(--color-text);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  padding-left: 1.4rem;
+  position: relative;
+  opacity: 0.8;
+}
+
+.welcome-bullets li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+}
+
 .start-journey-button {
-  background: linear-gradient(135deg, #ff9b29 0%, #ff7b29 100%);
-  color: white;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #07080e;
   border: none;
   padding: 16px 48px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 155, 41, 0.4);
-  letter-spacing: 1px;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+  letter-spacing: 1.5px;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .start-journey-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 155, 41, 0.6);
-  background: linear-gradient(135deg, #ffab29 0%, #ff8b29 100%);
+  box-shadow: 0 8px 28px rgba(245, 158, 11, 0.5);
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
 }
 
 .start-journey-button:active {
@@ -89,21 +115,20 @@
 
 /* Scrollbar styling */
 .welcome-card::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .welcome-card::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
+  background: transparent;
 }
 
 .welcome-card::-webkit-scrollbar-thumb {
-  background: rgba(255, 155, 41, 0.5);
-  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.3);
+  border-radius: 3px;
 }
 
 .welcome-card::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 155, 41, 0.7);
+  background: rgba(245, 158, 11, 0.5);
 }
 
 /* Responsive design */
@@ -132,6 +157,6 @@
 
   .start-journey-button {
     padding: 14px 36px;
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 }
