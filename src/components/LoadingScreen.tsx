@@ -5,7 +5,7 @@ export default function LoadingScreen() {
     <div className="loading-screen">
       <div className="loading-content">
         <span className="loading-star" aria-hidden="true">✦</span>
-        <h1 className="loading-title">MY WORLD</h1>
+        <h1 className="loading-title">ARIANNA TONIOLO SPACE</h1>
         <div className="loading-progress" aria-hidden="true">
           <div className="loading-progress-bar" />
         </div>
