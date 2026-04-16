@@ -1,0 +1,84 @@
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(14,165,233,0.35)  0%, transparent 50%),
+    radial-gradient(ellipse at 80% 15%, rgba(168,85,247,0.45)  0%, transparent 45%),
+    radial-gradient(ellipse at 50% 90%, rgba(244,114,182,0.25) 0%, transparent 40%),
+    var(--color-bg);
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.loading-star {
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--color-aurora-cyan), var(--color-aurora-violet), var(--color-aurora-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: rotateStar 8s linear infinite;
+  display: block;
+  line-height: 1;
+}
+
+@keyframes rotateStar {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.loading-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, #f0abfc 45%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.loading-progress {
+  width: clamp(160px, 30vw, 240px);
+  height: 1px;
+  background: rgba(168, 85, 247, 0.20);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.loading-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-aurora-cyan), var(--color-aurora-violet));
+  animation: progressSweep 2s ease-in-out infinite;
+}
+
+@keyframes progressSweep {
+  0%   { transform: scaleX(0); transform-origin: left;  }
+  49%  { transform: scaleX(1); transform-origin: left;  }
+  50%  { transform: scaleX(1); transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+.loading-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.70rem;
+  letter-spacing: 0.3em;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-star          { animation: none; }
+  .loading-progress-bar  { animation: none; transform: scaleX(0.6); transform-origin: left; }
+}

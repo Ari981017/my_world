@@ -9,6 +9,8 @@
   --color-border-top:     rgba(255, 255, 255, 0.15);
   --color-text:           #f1f5f9;
   --color-text-muted:     #94a3b8;
+  /* transition alias — removed once component CSS files are redesigned */
+  --color-accent:         var(--color-aurora-cyan);
 }
 
 html,

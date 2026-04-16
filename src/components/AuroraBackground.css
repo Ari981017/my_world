@@ -1,0 +1,62 @@
+.aurora-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.aurora-sphere {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+}
+
+.aurora-cyan {
+  width: 300px;
+  height: 300px;
+  background: var(--color-aurora-cyan);
+  top: -80px;
+  left: -60px;
+  animation: auroraMoveA 20s ease-in-out infinite alternate;
+}
+
+.aurora-violet {
+  width: 400px;
+  height: 400px;
+  background: var(--color-aurora-violet);
+  top: -100px;
+  right: -80px;
+  animation: auroraMoveB 25s ease-in-out infinite alternate;
+}
+
+.aurora-pink {
+  width: 200px;
+  height: 200px;
+  background: var(--color-aurora-pink);
+  bottom: -40px;
+  left: 30%;
+  animation: auroraPulse 15s ease-in-out infinite;
+}
+
+@keyframes auroraMoveA {
+  0%   { transform: translate(0, 0)       scale(1);    }
+  50%  { transform: translate(60px, 40px)  scale(1.1);  }
+  100% { transform: translate(20px, 80px)  scale(0.95); }
+}
+
+@keyframes auroraMoveB {
+  0%   { transform: translate(0, 0)        scale(1);    }
+  50%  { transform: translate(-50px, 50px)  scale(1.05); }
+  100% { transform: translate(-20px, 100px) scale(0.9);  }
+}
+
+@keyframes auroraPulse {
+  0%, 100% { opacity: 0.25; transform: scale(1);   }
+  50%       { opacity: 0.45; transform: scale(1.2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-sphere { animation: none !important; }
+}

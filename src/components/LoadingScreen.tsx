@@ -1,19 +1,16 @@
+import './LoadingScreen.css';
+
 export default function LoadingScreen() {
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: '#07080e',
-      color: '#f59e0b',
-      fontFamily: "'Space Grotesk', sans-serif",
-      fontSize: '1rem',
-      letterSpacing: '2px',
-      fontWeight: 500,
-    }}>
-      CARICAMENTO...
+    <div className="loading-screen">
+      <div className="loading-content">
+        <span className="loading-star" aria-hidden="true">✦</span>
+        <h1 className="loading-title">MY WORLD</h1>
+        <div className="loading-progress" aria-hidden="true">
+          <div className="loading-progress-bar" />
+        </div>
+        <p className="loading-text">CARICAMENTO</p>
+      </div>
     </div>
   );
 }

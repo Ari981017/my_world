@@ -1,4 +1,6 @@
 import { useFlightStore } from '../store/flightStore';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlane } from '@fortawesome/free-solid-svg-icons'
 import './WelcomeCard.css';
 
 export default function WelcomeCard() {
@@ -29,6 +31,7 @@ export default function WelcomeCard() {
           aria-label="Inizia il viaggio"
         >
           INIZIA VIAGGIO
+          <FontAwesomeIcon icon={faPlane} />
         </button>
       </div>
     </div>

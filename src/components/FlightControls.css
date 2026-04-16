@@ -1,135 +1,143 @@
 .flight-controls {
-  position: absolute;
-  bottom: 2rem;
+  position: fixed;
+  bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--color-surface);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  padding: 1rem 1.5rem;
+  z-index: 10;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
   align-items: center;
-  z-index: 100;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  gap: 12px;
+  padding: 10px 20px;
+  background: rgba(168, 85, 247, 0.08);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-top: 1px solid var(--color-border-top);
+  border-radius: 60px;
+  box-shadow: 0 0 40px rgba(168,85,247,0.18), 0 8px 40px rgba(0,0,0,0.50);
+  white-space: nowrap;
 }
 
 .progress-indicator {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
+  gap: 8px;
 }
 
 .current-location {
-  color: var(--color-text);
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.3px;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--color-aurora-cyan), var(--color-aurora-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.03em;
 }
 
 .position-counter {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
   color: var(--color-text-muted);
-  font-size: 0.72rem;
+  opacity: 0.6;
 }
 
 .control-buttons {
   display: flex;
-  gap: 0.75rem;
   align-items: center;
+  gap: 6px;
 }
 
 .control-buttons button {
-  background: rgba(241, 245, 249, 0.04);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.20);
+  color: var(--color-text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.85rem;
+  font-size: 0.70rem;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
 }
 
 .control-buttons button:hover:not(:disabled) {
-  background: rgba(245, 158, 11, 0.12);
-  border-color: rgba(245, 158, 11, 0.4);
-  color: var(--color-accent);
-  transform: scale(1.1);
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--color-text);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+  transform: scale(1.08);
 }
 
 .control-buttons button:disabled {
   opacity: 0.25;
-  cursor: not-allowed;
+  cursor: default;
 }
 
 .control-buttons .play-pause {
-  width: 48px;
-  height: 48px;
-  background: rgba(245, 158, 11, 0.12);
-  border-color: rgba(245, 158, 11, 0.3);
-  color: var(--color-accent);
-  font-size: 0.95rem;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, rgba(14,165,233,0.20), rgba(168,85,247,0.30));
+  border-color: rgba(168, 85, 247, 0.40);
+  color: var(--color-text);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.20);
 }
 
 .control-buttons .play-pause:hover:not(:disabled) {
-  background: rgba(245, 158, 11, 0.22);
-  border-color: var(--color-accent);
+  background: linear-gradient(135deg, rgba(14,165,233,0.35), rgba(168,85,247,0.50));
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.40);
+  transform: scale(1.08);
 }
 
 .location-dots {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 6px;
 }
 
 .location-dots .dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(241, 245, 249, 0.15);
+  background: rgba(241, 245, 249, 0.20);
   border: none;
-  cursor: pointer;
-  transition: all 0.2s;
   padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .location-dots .dot:hover:not(:disabled) {
-  background: rgba(245, 158, 11, 0.4);
+  background: rgba(168, 85, 247, 0.50);
   transform: scale(1.3);
 }
 
 .location-dots .dot.active {
-  background: var(--color-accent);
+  background: var(--color-aurora-cyan);
   transform: scale(1.4);
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.80), 0 0 4px rgba(14, 165, 233, 1);
 }
 
 .location-dots .dot:disabled {
-  cursor: not-allowed;
+  opacity: 0.25;
+  cursor: default;
 }
 
-/* Responsive adjustments */
 @media (max-width: 600px) {
   .flight-controls {
-    padding: 0.75rem 1rem;
-    bottom: 1rem;
+    bottom: 16px;
+    padding: 8px 14px;
+    gap: 8px;
+    max-width: calc(100vw - 32px);
   }
 
   .current-location {
-    font-size: 0.8rem;
+    font-size: 0.70rem;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .control-buttons button {
-    width: 36px;
-    height: 36px;
-  }
-
-  .control-buttons .play-pause {
-    width: 42px;
-    height: 42px;
-  }
+  .control-buttons button       { width: 28px; height: 28px; }
+  .control-buttons .play-pause  { width: 38px; height: 38px; }
 }
