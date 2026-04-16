@@ -1,10 +1,14 @@
+/* src/index.css */
 :root {
-  --color-accent: #f59e0b;
-  --color-bg: #07080e;
-  --color-text: #f1f5f9;
-  --color-text-muted: #64748b;
-  --color-border: rgba(241, 245, 249, 0.08);
-  --color-surface: rgba(12, 14, 24, 0.94);
+  --color-bg:             #04030c;
+  --color-aurora-cyan:    #0ea5e9;
+  --color-aurora-violet:  #a855f7;
+  --color-aurora-pink:    #f472b6;
+  --color-surface:        rgba(168, 85, 247, 0.07);
+  --color-border:         rgba(168, 85, 247, 0.22);
+  --color-border-top:     rgba(255, 255, 255, 0.15);
+  --color-text:           #f1f5f9;
+  --color-text-muted:     #94a3b8;
 }
 
 html,
