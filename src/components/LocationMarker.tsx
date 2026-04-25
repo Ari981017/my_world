@@ -1,97 +1,85 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Text } from '@react-three/drei';
 import {
-  MARKER_FLAG_WIDTH,
-  MARKER_FLAG_HEIGHT,
   MARKER_LABEL_SIZE,
   MARKER_PULSE_FREQUENCY,
   MARKER_PULSE_AMPLITUDE,
   MARKER_GLOW_SIZE,
   MARKER_GLOW_COLOR,
-  FLAG_CDN_BASE_URL
 } from '../config/constants';
 
 interface LocationMarkerProps {
   position: THREE.Vector3;
   label: string;
-  countryCode: string; // ISO 3166-1 alpha-2 (e.g., "IT", "GB", "US")
   isActive?: boolean;
+  onClick?: () => void;
 }
 
-// Global texture cache to avoid loading same flag multiple times
-const flagTextureCache = new Map<string, THREE.Texture | null>();
+const PIN_SIZE = 0.22;
+
+function createPinTexture(active: boolean): THREE.CanvasTexture {
+  const w = 128;
+  const h = 192;
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d')!;
+
+  const cx = w / 2;
+  const r = w * 0.40;
+  const pinCY = r + 10;
+  const tip = h - 8;
+
+  // Drop shadow
+  ctx.shadowColor = 'rgba(0,0,0,0.45)';
+  ctx.shadowBlur = 14;
+  ctx.shadowOffsetX = 2;
+  ctx.shadowOffsetY = 4;
+
+  // Teardrop shape via arc + bezier curves
+  ctx.beginPath();
+  ctx.moveTo(cx, tip);
+  ctx.bezierCurveTo(cx - r * 0.25, tip - h * 0.18, cx - r, pinCY + r * 0.55, cx - r, pinCY);
+  ctx.arc(cx, pinCY, r, Math.PI, 0, false);
+  ctx.bezierCurveTo(cx + r, pinCY + r * 0.55, cx + r * 0.25, tip - h * 0.18, cx, tip);
+  ctx.closePath();
+
+  ctx.fillStyle = active ? '#EA4335' : '#5b8dd9';
+  ctx.fill();
+
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+
+  // Darker inner ring for depth
+  ctx.beginPath();
+  ctx.arc(cx, pinCY, r * 0.46, 0, Math.PI * 2);
+  ctx.fillStyle = active ? 'rgba(180,30,20,0.6)' : 'rgba(40,70,140,0.5)';
+  ctx.fill();
+
+  // White center dot
+  ctx.beginPath();
+  ctx.arc(cx, pinCY, r * 0.28, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.fill();
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+const activePinTexture = createPinTexture(true);
+const inactivePinTexture = createPinTexture(false);
+
 
 export default function LocationMarker({
   position,
   label,
-  countryCode,
   isActive = false,
+  onClick,
 }: LocationMarkerProps) {
   const groupRef = useRef<THREE.Group>(null);
-  const [flagTexture, setFlagTexture] = useState<THREE.Texture | null>(null);
-  const loadingRef = useRef(false);
 
-  // Load flag texture with error handling and caching
-  useEffect(() => {
-    const code = countryCode.toLowerCase();
-
-    // Check cache first
-    if (flagTextureCache.has(code)) {
-      const cachedTexture = flagTextureCache.get(code)!;
-      setFlagTexture(cachedTexture);
-      return;
-    }
-
-    // Prevent multiple loads
-    if (loadingRef.current) {
-      return;
-    }
-    loadingRef.current = true;
-
-    const loader = new THREE.TextureLoader();
-    const flagUrl = `${FLAG_CDN_BASE_URL}/${code}.png`;
-
-    loader.load(
-      flagUrl,
-      (texture) => {
-        flagTextureCache.set(code, texture);
-        setFlagTexture(texture);
-        loadingRef.current = false;
-      },
-      undefined,
-      (error) => {
-        console.warn(`Failed to load flag for ${countryCode}:`, error);
-        flagTextureCache.set(code, null);
-
-        // Create fallback colored texture
-        const canvas = document.createElement('canvas');
-        canvas.width = 160;
-        canvas.height = 120;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          const gradient = ctx.createLinearGradient(0, 0, 160, 120);
-          gradient.addColorStop(0, '#4A90E2');
-          gradient.addColorStop(1, '#2C5F8D');
-          ctx.fillStyle = gradient;
-          ctx.fillRect(0, 0, 160, 120);
-
-          ctx.fillStyle = 'white';
-          ctx.font = 'bold 40px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(countryCode, 80, 60);
-        }
-
-        const fallbackTexture = new THREE.CanvasTexture(canvas);
-        setFlagTexture(fallbackTexture);
-        loadingRef.current = false;
-      }
-    );
-  }, [countryCode]);
-
-  // Pulse effect when active
   useFrame((state) => {
     if (groupRef.current && isActive) {
       const pulse = 1 + Math.sin(state.clock.getElapsedTime() * MARKER_PULSE_FREQUENCY) * MARKER_PULSE_AMPLITUDE;
@@ -101,30 +89,29 @@ export default function LocationMarker({
     }
   });
 
-  // Orient the group so local Z (plane normal) points outward from globe center
-  // This makes a default PlaneGeometry (XY plane, normal=Z) lie flat on the surface
   const normal = position.clone().normalize();
   const forward = new THREE.Vector3(0, 0, 1);
   const quaternion = new THREE.Quaternion().setFromUnitVectors(forward, normal);
 
   return (
-    <group ref={groupRef} position={position} quaternion={quaternion}>
-      {/* Flag laid flat on the globe surface, face pointing outward */}
-      {flagTexture && (
-        <mesh position={[0, 0, 0.02]}>
-          <planeGeometry args={[MARKER_FLAG_WIDTH, MARKER_FLAG_HEIGHT]} />
-          <meshStandardMaterial
-            map={flagTexture}
-            side={THREE.DoubleSide}
-            transparent
-            opacity={0.95}
-          />
-        </mesh>
-      )}
+    <group
+      ref={groupRef}
+      position={position}
+      quaternion={quaternion}
+      onClick={onClick}
+      onPointerOver={() => { if (onClick) document.body.style.cursor = 'pointer'; }}
+      onPointerOut={() => { document.body.style.cursor = 'auto'; }}
+    >
+      <sprite position={[0, 0, 0.04]} scale={[PIN_SIZE, PIN_SIZE * 1.5, 1]}>
+        <spriteMaterial
+          map={isActive ? activePinTexture : inactivePinTexture}
+          transparent
+          opacity={isActive ? 1 : 0.75}
+        />
+      </sprite>
 
-      {/* Label above the flag */}
       <Text
-        position={[0, 0, 0.15]}
+        position={[0, 0, 0.28]}
         fontSize={MARKER_LABEL_SIZE}
         color="white"
         anchorX="center"
@@ -135,7 +122,6 @@ export default function LocationMarker({
         {label}
       </Text>
 
-      {/* Glowing dot when active */}
       {isActive && (
         <mesh position={[0, 0, 0.01]}>
           <sphereGeometry args={[MARKER_GLOW_SIZE, 16, 16]} />

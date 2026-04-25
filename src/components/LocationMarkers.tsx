@@ -6,6 +6,8 @@ import LocationMarker from './LocationMarker';
 
 export default function LocationMarkers() {
   const currentIndex = useFlightStore((state) => state.currentIndex);
+  const goToLocation = useFlightStore((state) => state.goToLocation);
+  const setShowCard = useFlightStore((state) => state.setShowCard);
 
   return (
     <>
@@ -16,13 +18,21 @@ export default function LocationMarkers() {
           GLOBE_RADIUS
         );
 
+        const handleClick = () => {
+          if (index === currentIndex) {
+            setShowCard(true);
+          } else {
+            goToLocation(index);
+          }
+        };
+
         return (
           <LocationMarker
             key={exp.id}
             position={position}
-            label={exp.location.name.split(',')[0]} // First part of location name
-            countryCode={exp.countryCode}
+            label={exp.location.name.split(',')[0]}
             isActive={index === currentIndex}
+            onClick={handleClick}
           />
         );
       })}
