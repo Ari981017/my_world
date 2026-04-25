@@ -46,6 +46,7 @@
   margin: 0;
   letter-spacing: -0.02em;
   line-height: 1;
+  text-align: center;
 }
 
 .loading-progress {

@@ -1,4 +1,4 @@
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaStepBackward, FaStepForward } from 'react-icons/fa';
 import { useFlightStore } from '../store/flightStore';
 import { experiences } from '../data/experiences';
 import { UI_TEXT } from '../config/constants';
@@ -58,7 +58,42 @@ export default function ExperienceCard() {
 
   return (
     <div className="experience-card">
-      {/* Close button */}
+      {/* Mobile navbar — visibile solo su ≤480px via CSS */}
+      <div className="mobile-nav">
+        <button
+          className="mobile-nav-btn"
+          onClick={() => {
+            useFlightStore.getState().setShowCard(false);
+            useFlightStore.getState().previousLocation();
+          }}
+          aria-label="Previous location"
+        >
+          <FaStepBackward />
+        </button>
+        <div className="mobile-nav-info">
+          <span className="mobile-nav-location">{exp.location.name}</span>
+          <span className="mobile-nav-counter">{currentIndex + 1} / {experiences.length}</span>
+        </div>
+        <button
+          className="mobile-nav-btn"
+          onClick={() => {
+            useFlightStore.getState().setShowCard(false);
+            useFlightStore.getState().nextLocation();
+          }}
+          aria-label="Next location"
+        >
+          <FaStepForward />
+        </button>
+        <button
+          className="mobile-nav-btn"
+          onClick={() => useFlightStore.getState().setShowCard(false)}
+          aria-label={UI_TEXT.close}
+        >
+          <FaTimes />
+        </button>
+      </div>
+
+      {/* Close button (desktop/tablet) */}
       <button
         className="close-button"
         onClick={() => useFlightStore.getState().setShowCard(false)}

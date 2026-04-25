@@ -60,3 +60,9 @@
 @media (prefers-reduced-motion: reduce) {
   .aurora-sphere { animation: none !important; }
 }
+
+@media (max-width: 480px) {
+  .aurora-cyan   { width: 180px; height: 180px; }
+  .aurora-violet { width: 240px; height: 240px; }
+  .aurora-pink   { width: 120px; height: 120px; }
+}

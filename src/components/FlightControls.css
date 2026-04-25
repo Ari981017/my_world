@@ -123,21 +123,8 @@
   cursor: default;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .flight-controls {
-    bottom: 16px;
-    padding: 8px 14px;
-    gap: 8px;
-    max-width: calc(100vw - 32px);
+    display: none;
   }
-
-  .current-location {
-    font-size: 0.70rem;
-    max-width: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .control-buttons button       { width: 28px; height: 28px; }
-  .control-buttons .play-pause  { width: 38px; height: 38px; }
 }

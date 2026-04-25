@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber';
-import { Suspense } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { useProgress } from '@react-three/drei';
 import Scene from './components/Scene';
 import DotGrid from './components/DotGrid';
@@ -10,9 +10,24 @@ import LoadingScreen from './components/LoadingScreen';
 import AuroraBackground from './components/AuroraBackground';
 import './App.css';
 
+const MIN_LOADING_MS = 500;
+
 function LoadingOverlay() {
   const { active } = useProgress();
-  return active ? <LoadingScreen /> : null;
+  const [visible, setVisible] = useState(true);
+  const startTime = useRef(Date.now());
+
+  useEffect(() => {
+    if (!active) {
+      const elapsed = Date.now() - startTime.current;
+      const remaining = MIN_LOADING_MS - elapsed;
+      const delay = remaining > 0 ? remaining : 0;
+      const timer = setTimeout(() => setVisible(false), delay);
+      return () => clearTimeout(timer);
+    }
+  }, [active]);
+
+  return visible ? <LoadingScreen /> : null;
 }
 
 export default function App() {
