@@ -31,6 +31,7 @@ export default function LocationMarkers() {
             key={exp.id}
             position={position}
             label={exp.location.name.split(',')[0]}
+            countryCode={exp.countryCode}
             isActive={index === currentIndex}
             onClick={handleClick}
           />

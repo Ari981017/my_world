@@ -1,97 +1,97 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Text } from '@react-three/drei';
-import {
-  MARKER_LABEL_SIZE,
-  MARKER_PULSE_FREQUENCY,
-  MARKER_PULSE_AMPLITUDE,
-  MARKER_GLOW_SIZE,
-  MARKER_GLOW_COLOR,
-} from '../config/constants';
+import { MARKER_LABEL_SIZE } from '../config/constants';
 
 interface LocationMarkerProps {
   position: THREE.Vector3;
   label: string;
+  countryCode: string;
   isActive?: boolean;
   onClick?: () => void;
 }
 
-const PIN_SIZE = 0.22;
+const POLE_HEIGHT = 0.22;
+const POLE_RADIUS = 0.014;
+const BEACON_R    = 0.038;
+const RING_R      = 0.08;
+const RING_TUBE   = 0.005;
+const FLAG_W      = 0.20;
+const FLAG_H      = 0.13;
 
-function createPinTexture(active: boolean): THREE.CanvasTexture {
-  const w = 128;
-  const h = 192;
-  const canvas = document.createElement('canvas');
-  canvas.width = w;
-  canvas.height = h;
-  const ctx = canvas.getContext('2d')!;
+const VIOLET = new THREE.Color('#a855f7');
+const PINK   = new THREE.Color('#ec4899');
+const MUTED  = new THREE.Color('#6b7280');
 
-  const cx = w / 2;
-  const r = w * 0.40;
-  const pinCY = r + 10;
-  const tip = h - 8;
-
-  // Drop shadow
-  ctx.shadowColor = 'rgba(0,0,0,0.45)';
-  ctx.shadowBlur = 14;
-  ctx.shadowOffsetX = 2;
-  ctx.shadowOffsetY = 4;
-
-  // Teardrop shape via arc + bezier curves
-  ctx.beginPath();
-  ctx.moveTo(cx, tip);
-  ctx.bezierCurveTo(cx - r * 0.25, tip - h * 0.18, cx - r, pinCY + r * 0.55, cx - r, pinCY);
-  ctx.arc(cx, pinCY, r, Math.PI, 0, false);
-  ctx.bezierCurveTo(cx + r, pinCY + r * 0.55, cx + r * 0.25, tip - h * 0.18, cx, tip);
-  ctx.closePath();
-
-  ctx.fillStyle = active ? '#EA4335' : '#5b8dd9';
-  ctx.fill();
-
-  ctx.shadowBlur = 0;
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 0;
-
-  // Darker inner ring for depth
-  ctx.beginPath();
-  ctx.arc(cx, pinCY, r * 0.46, 0, Math.PI * 2);
-  ctx.fillStyle = active ? 'rgba(180,30,20,0.6)' : 'rgba(40,70,140,0.5)';
-  ctx.fill();
-
-  // White center dot
-  ctx.beginPath();
-  ctx.arc(cx, pinCY, r * 0.28, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(255,255,255,0.95)';
-  ctx.fill();
-
-  return new THREE.CanvasTexture(canvas);
-}
-
-const activePinTexture = createPinTexture(true);
-const inactivePinTexture = createPinTexture(false);
-
+const flagCache = new Map<string, THREE.Texture | null>();
 
 export default function LocationMarker({
   position,
   label,
+  countryCode,
   isActive = false,
   onClick,
 }: LocationMarkerProps) {
-  const groupRef = useRef<THREE.Group>(null);
+  const groupRef  = useRef<THREE.Group>(null);
+  const beaconRef = useRef<THREE.Mesh>(null);
+  const glowRef   = useRef<THREE.Mesh>(null);
+  const ring1Ref  = useRef<THREE.Mesh>(null);
+  const ring2Ref  = useRef<THREE.Mesh>(null);
+  const ring3Ref  = useRef<THREE.Mesh>(null);
+  const flagRef   = useRef<THREE.Mesh>(null);
+  const loadingRef = useRef(false);
+
+  const [flagTexture, setFlagTexture] = useState<THREE.Texture | null>(null);
+
+  useEffect(() => {
+    const code = countryCode.toLowerCase();
+    if (flagCache.has(code)) { setFlagTexture(flagCache.get(code)!); return; }
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+
+    new THREE.TextureLoader().load(
+      `https://flagcdn.com/w160/${code}.png`,
+      (tex) => { flagCache.set(code, tex); setFlagTexture(tex); loadingRef.current = false; },
+      undefined,
+      () => { flagCache.set(code, null); loadingRef.current = false; }
+    );
+  }, [countryCode]);
 
   useFrame((state) => {
-    if (groupRef.current && isActive) {
-      const pulse = 1 + Math.sin(state.clock.getElapsedTime() * MARKER_PULSE_FREQUENCY) * MARKER_PULSE_AMPLITUDE;
-      groupRef.current.scale.setScalar(pulse);
-    } else if (groupRef.current) {
-      groupRef.current.scale.setScalar(1);
+    const t = state.clock.getElapsedTime();
+
+    if (beaconRef.current) {
+      const f = isActive ? Math.sin(t * 2.2) * 0.012 : 0;
+      beaconRef.current.position.z = POLE_HEIGHT + f;
+      if (glowRef.current) glowRef.current.position.z = POLE_HEIGHT + f;
+    }
+
+    [ring1Ref, ring2Ref, ring3Ref].forEach((ref, i) => {
+      if (!ref.current) return;
+      const mat = ref.current.material as THREE.MeshBasicMaterial;
+      if (!isActive) { mat.opacity = 0; return; }
+      const progress = ((t * 0.75) + i * 0.33) % 1;
+      ref.current.scale.set(1 + progress * 4.5, 1 + progress * 4.5, 1);
+      mat.opacity = (1 - progress) * 0.55;
+    });
+
+    // Flag wave animation
+    if (flagRef.current && !isActive) {
+      const pos = flagRef.current.geometry.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i);
+        const xNorm = (x + FLAG_W / 2) / FLAG_W; // 0 at pole, 1 at free end
+        const wave = Math.sin(x * 14 + t * 3.5) * 0.018 * xNorm
+                   + Math.sin(x * 8  + t * 2.2) * 0.009 * xNorm;
+        pos.setZ(i, wave);
+      }
+      pos.needsUpdate = true;
     }
   });
 
-  const normal = position.clone().normalize();
-  const forward = new THREE.Vector3(0, 0, 1);
-  const quaternion = new THREE.Quaternion().setFromUnitVectors(forward, normal);
+  const normal     = position.clone().normalize();
+  const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
 
   return (
     <group
@@ -102,31 +102,71 @@ export default function LocationMarker({
       onPointerOver={() => { if (onClick) document.body.style.cursor = 'pointer'; }}
       onPointerOut={() => { document.body.style.cursor = 'auto'; }}
     >
-      <sprite position={[0, 0, 0.04]} scale={[PIN_SIZE, PIN_SIZE * 1.5, 1]}>
-        <spriteMaterial
-          map={isActive ? activePinTexture : inactivePinTexture}
+      {/* Base ring */}
+      <mesh position={[0, 0, 0.005]}>
+        <torusGeometry args={[RING_R * 0.6, RING_TUBE * 0.7, 8, 32]} />
+        <meshBasicMaterial
+          color={isActive ? VIOLET : MUTED}
           transparent
-          opacity={isActive ? 1 : 0.75}
+          opacity={isActive ? 0.6 : 0.35}
         />
-      </sprite>
+      </mesh>
 
-      <Text
-        position={[0, 0, 0.28]}
-        fontSize={MARKER_LABEL_SIZE}
-        color="white"
-        anchorX="center"
-        anchorY="bottom"
-        outlineWidth={0.003}
-        outlineColor="#000"
-      >
-        {label}
-      </Text>
-
-      {isActive && (
-        <mesh position={[0, 0, 0.01]}>
-          <sphereGeometry args={[MARKER_GLOW_SIZE, 16, 16]} />
-          <meshBasicMaterial color={MARKER_GLOW_COLOR} transparent opacity={0.8} />
+      {/* Sonar rings (active only) */}
+      {[ring1Ref, ring2Ref, ring3Ref].map((ref, i) => (
+        <mesh key={i} ref={ref} position={[0, 0, 0.006]}>
+          <torusGeometry args={[RING_R, RING_TUBE, 8, 32]} />
+          <meshBasicMaterial color={PINK} transparent opacity={0} />
         </mesh>
+      ))}
+
+      {/* Pole + flag (inactive only) */}
+      {!isActive && (
+        <>
+          <mesh position={[0, 0, POLE_HEIGHT / 2]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[POLE_RADIUS, POLE_RADIUS * 1.5, POLE_HEIGHT, 6]} />
+            <meshBasicMaterial color="#00ffff" transparent opacity={0.70} />
+          </mesh>
+
+          {flagTexture && (
+            <mesh ref={flagRef} position={[FLAG_W / 2, 0, POLE_HEIGHT - FLAG_H / 2]} rotation={[Math.PI / 2, 0, 0]}>
+              <planeGeometry args={[FLAG_W, FLAG_H, 16, 8]} />
+              <meshBasicMaterial
+                map={flagTexture}
+                side={THREE.DoubleSide}
+                transparent
+                opacity={0.95}
+              />
+            </mesh>
+          )}
+        </>
+      )}
+
+      {/* Glow halo */}
+      <mesh ref={glowRef} position={[0, 0, POLE_HEIGHT]}>
+        <sphereGeometry args={[BEACON_R * 2.5, 16, 16]} />
+        <meshBasicMaterial color={VIOLET} transparent opacity={isActive ? 0.22 : 0} />
+      </mesh>
+
+      {/* Beacon */}
+      <mesh ref={beaconRef} position={[0, 0, POLE_HEIGHT]}>
+        <sphereGeometry args={[BEACON_R, 16, 16]} />
+        <meshBasicMaterial color={VIOLET} transparent opacity={isActive ? 1 : 0} />
+      </mesh>
+
+      {/* Label (active only) */}
+      {isActive && (
+        <Text
+          position={[0, 0, POLE_HEIGHT + 0.09]}
+          fontSize={MARKER_LABEL_SIZE}
+          color="#f1f5f9"
+          anchorX="center"
+          anchorY="bottom"
+          outlineWidth={0.003}
+          outlineColor="#000"
+        >
+          {label}
+        </Text>
       )}
     </group>
   );

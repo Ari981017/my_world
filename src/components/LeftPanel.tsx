@@ -40,7 +40,7 @@ export default function LeftPanel() {
         <a href="https://github.com/Ari981017" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
           <FaGithub />
         </a>
-        <a href="https://linkedin.com/in/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <a href="https://www.linkedin.com/in/arianna-toniolo-front-end" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
           <FaLinkedin />
         </a>
         <a href="mailto:ariannatoniolo7@gmail.com" aria-label="Email">

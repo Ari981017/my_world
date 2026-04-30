@@ -299,7 +299,7 @@ export const experiences: Experience[] = [
     },
     lavoro: {
       company: "",
-      jobTitle: "Tech Lead — Architettura & DevOps",
+      jobTitle: "Tech Lead — Backend & Architettura",
       period: { start: "2022-11", end: "present" },
       periodLabel: "",
       technologies: ["Node.js", "Express", "JWT", "AWS S3", "GitLab", "GitHub", "Jira", "Agile/SCRUM"],
