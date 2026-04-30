@@ -8,6 +8,7 @@ import ExperienceCard from './components/ExperienceCard';
 import FlightControls from './components/FlightControls';
 import LoadingScreen from './components/LoadingScreen';
 import AuroraBackground from './components/AuroraBackground';
+import LeftPanel from './components/LeftPanel';
 import './App.css';
 
 const MIN_LOADING_MS = 500;
@@ -53,6 +54,7 @@ export default function App() {
 
       <LoadingOverlay />
       <WelcomeCard />
+      <LeftPanel />
       <ExperienceCard />
       <FlightControls />
     </div>

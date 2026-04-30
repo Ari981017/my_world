@@ -1,22 +1,49 @@
-.welcome-card {
+.welcome-overlay {
   position: fixed;
-  bottom: 24px;
-  left: 24px;
-  width: 300px;
+  inset: 0;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.60);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: overlayIn 0.5s ease both;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.welcome-card {
+  width: min(500px, calc(100vw - 48px));
   background: var(--color-surface);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
   border: 1px solid var(--color-border);
   border-top: 1px solid var(--color-border-top);
-  border-radius: 20px 20px 20px 6px;
+  border-radius: 24px;
   box-shadow:
-    0 0 80px rgba(168, 85, 247, 0.18),
-    0 0 40px rgba(14, 165, 233, 0.10),
-    0 24px 60px rgba(0, 0, 0, 0.60);
-  padding: 24px;
+    0 0 100px rgba(168, 85, 247, 0.22),
+    0 0 50px rgba(14, 165, 233, 0.12),
+    0 32px 80px rgba(0, 0, 0, 0.65);
+  padding: 36px;
   overflow: hidden;
-  animation: slideInCorner 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  animation: cardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+@keyframes cardIn {
+  from { transform: scale(0.94) translateY(16px); opacity: 0; }
+  to   { transform: scale(1)    translateY(0);    opacity: 1; }
+}
+
+.welcome-card.exit {
+  animation: cardOut 0.3s ease-in forwards;
+}
+
+@keyframes cardOut {
+  to { transform: scale(0.96) translateY(8px); opacity: 0; }
 }
 
 .welcome-card::before {
@@ -30,19 +57,6 @@
   z-index: 0;
 }
 
-.welcome-card.exit {
-  animation: exitCorner 0.3s ease-in forwards;
-}
-
-@keyframes slideInCorner {
-  from { transform: translateY(40px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-
-@keyframes exitCorner {
-  to { transform: scale(0.95) translateY(10px); opacity: 0; }
-}
-
 .welcome-content {
   position: relative;
   z-index: 1;
@@ -50,93 +64,87 @@
 
 .welcome-title {
   font-family: 'Syne', sans-serif;
-  font-size: 1.3rem;
+  font-size: 2rem;
   font-weight: 800;
   background: linear-gradient(135deg, #fff 0%, #f0abfc 50%, #67e8f9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin: 0 0 4px;
-  line-height: 1.2;
+  margin: 0 0 6px;
+  line-height: 1.1;
 }
 
 .welcome-subtitle {
   font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 400;
   color: rgba(14, 165, 233, 0.75);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  margin: 0 0 14px;
+  margin: 0 0 20px;
 }
 
 .welcome-divider {
   height: 1px;
   background: linear-gradient(90deg, rgba(14,165,233,0.5), rgba(168,85,247,0.5), transparent);
-  margin-bottom: 14px;
-}
-
-.welcome-description {
   margin-bottom: 20px;
 }
 
+.welcome-description {
+  margin-bottom: 28px;
+}
+
 .welcome-description p {
-  font-size: 0.77rem;
+  font-size: 0.84rem;
   color: var(--color-text-muted);
-  line-height: 1.65;
-  margin: 0;
+  line-height: 1.7;
+  margin: 0 0 10px;
 }
 
-.welcome-bullets {
-  list-style: none;
-  padding: 0;
-  margin: 8px 0 0;
+.welcome-quote {
+  font-style: italic;
+  font-size: 0.82rem !important;
+  color: var(--color-aurora-violet) !important;
+  opacity: 0.95;
+  border-left: 2px solid var(--color-aurora-violet);
+  padding-left: 12px;
+  margin-bottom: 16px !important;
 }
 
-.welcome-bullets li {
-  font-size: 0.74rem;
-  color: var(--color-text-muted);
-  line-height: 1.65;
-  padding-left: 14px;
-  position: relative;
-}
-
-.welcome-bullets li::before {
-  content: '·';
-  position: absolute;
-  left: 0;
-  color: var(--color-aurora-violet);
-  opacity: 0.8;
+.welcome-tech {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem !important;
+  color: var(--color-aurora-cyan) !important;
+  opacity: 0.85;
+  letter-spacing: 0.04em;
+  margin-top: 4px !important;
+  margin-bottom: 0 !important;
 }
 
 .start-journey-button {
   width: 100%;
-  padding: 11px 16px;
+  padding: 14px 20px;
   background: linear-gradient(135deg, rgba(14,165,233,0.25), rgba(168,85,247,0.35));
   border: 1px solid rgba(168, 85, 247, 0.50);
-  border-radius: 10px;
+  border-radius: 12px;
   color: var(--color-text);
   font-family: 'DM Mono', monospace;
-  font-size: 0.70rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 0 24px rgba(168, 85, 247, 0.25);
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.25);
   transition: box-shadow 0.25s, background 0.25s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .start-journey-button:hover {
   background: linear-gradient(135deg, rgba(14,165,233,0.35), rgba(168,85,247,0.50));
-  box-shadow: 0 0 40px rgba(168, 85, 247, 0.40);
-}
-
-.start-journey-button:hover .btn-arrow {
-  transform: translateX(4px);
+  box-shadow: 0 0 48px rgba(168, 85, 247, 0.45);
 }
 
 .start-journey-button:active {
@@ -154,12 +162,14 @@
 
 @media (max-width: 480px) {
   .welcome-card {
-    left: 12px;
-    right: 12px;
-    bottom: max(12px, env(safe-area-inset-bottom, 12px));
-    width: auto;
-    border-radius: 16px;
-    max-height: calc(100dvh - 40px);
+    width: calc(100vw - 32px);
+    padding: 28px 24px;
+    border-radius: 20px;
+    max-height: calc(100dvh - 48px);
     overflow-y: auto;
+  }
+
+  .welcome-title {
+    font-size: 1.6rem;
   }
 }

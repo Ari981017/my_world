@@ -11,18 +11,17 @@ export default function WelcomeCard() {
   if (hasStarted) return null;
 
   return (
+    <div className="welcome-overlay">
     <div className="welcome-card">
       <div className="welcome-content">
         <h1 className="welcome-title">Arianna Toniolo</h1>
         <p className="welcome-subtitle">Full Stack Developer</p>
 
         <div className="welcome-description">
-          <p>Full Stack Developer con 5 anni di esperienza su applicazioni web aziendali scalabili.</p>
-          <ul className="welcome-bullets">
-            <li>PHP, TypeScript, Vue 3, Node.js, PostgreSQL</li>
-            <li>Architetture a microservizi, API REST, automazione flussi</li>
-            <li>AWS S3, Redis, Agile — orientata alla qualità del codice</li>
-          </ul>
+          <p className="welcome-quote">"Credo che ogni luogo lasci qualcosa di sé in chi lo attraversa."</p>
+          <p>Ho fatto di questo portfolio un globo interattivo perché il viaggio è, da sempre, la mia più grande fonte di ispirazione. Ogni punto sulla mappa corrisponde a un'esperienza che mi ha cambiata — una città nuova, un team diverso, una sfida tecnica affrontata lontano da casa.</p>
+          <p>Sono una Full Stack Developer con 5 anni di esperienza su applicazioni web scalabili.</p>
+          <p className="welcome-tech">PHP · TypeScript · Vue 3 · Node.js · PostgreSQL · AWS</p>
         </div>
 
         <button
@@ -34,6 +33,7 @@ export default function WelcomeCard() {
           <FontAwesomeIcon icon={faPlane} />
         </button>
       </div>
+    </div>
     </div>
   );
 }
