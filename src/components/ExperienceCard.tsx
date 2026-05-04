@@ -1,14 +1,19 @@
+import { useState } from 'react';
 import { FaTimes, FaStepBackward, FaStepForward } from 'react-icons/fa';
 import { useFlightStore } from '../store/flightStore';
 import { experiences } from '../data/experiences';
 import { UI_TEXT } from '../config/constants';
+import FlowEngineDiagram from './FlowEngineDiagram';
 import './ExperienceCard.css';
 
 export default function ExperienceCard() {
   const { currentIndex, showCard } = useFlightStore();
+  const [showDiagram, setShowDiagram] = useState(false);
+
   if (!showCard) return null;
 
   const exp = experiences[currentIndex];
+  const isFlowEngine = exp.id === 'exp-4';
 
   const formatPeriod = (start: string, end: string): string => {
     try {
@@ -57,63 +62,62 @@ export default function ExperienceCard() {
   };
 
   return (
-    <div className="experience-card">
-      {/* Mobile navbar — visibile solo su ≤480px via CSS */}
-      <div className="mobile-nav">
-        <button
-          className="mobile-nav-btn"
-          onClick={() => {
-            useFlightStore.getState().setShowCard(false);
-            useFlightStore.getState().previousLocation();
-          }}
-          aria-label="Previous location"
-        >
-          <FaStepBackward />
-        </button>
-        <div className="mobile-nav-info">
-          <span className="mobile-nav-location">{exp.location.name}</span>
-          <span className="mobile-nav-counter">{currentIndex + 1} / {experiences.length}</span>
+    <>
+      <div className="experience-card">
+        {/* Mobile navbar — visibile solo su ≤480px via CSS */}
+        <div className="mobile-nav">
+          <button
+            className="mobile-nav-btn"
+            onClick={() => {
+              useFlightStore.getState().setShowCard(false);
+              useFlightStore.getState().previousLocation();
+            }}
+            aria-label="Previous location"
+          >
+            <FaStepBackward />
+          </button>
+          <div className="mobile-nav-info">
+            <span className="mobile-nav-location">{exp.location.name}</span>
+            <span className="mobile-nav-counter">{currentIndex + 1} / {experiences.length}</span>
+          </div>
+          <button
+            className="mobile-nav-btn"
+            onClick={() => {
+              useFlightStore.getState().setShowCard(false);
+              useFlightStore.getState().nextLocation();
+            }}
+            aria-label="Next location"
+          >
+            <FaStepForward />
+          </button>
+          <button
+            className="mobile-nav-btn"
+            onClick={() => useFlightStore.getState().setShowCard(false)}
+            aria-label={UI_TEXT.close}
+          >
+            <FaTimes />
+          </button>
         </div>
+
+        {/* Close button (desktop/tablet) */}
         <button
-          className="mobile-nav-btn"
-          onClick={() => {
-            useFlightStore.getState().setShowCard(false);
-            useFlightStore.getState().nextLocation();
-          }}
-          aria-label="Next location"
-        >
-          <FaStepForward />
-        </button>
-        <button
-          className="mobile-nav-btn"
+          className="close-button"
           onClick={() => useFlightStore.getState().setShowCard(false)}
           aria-label={UI_TEXT.close}
         >
           <FaTimes />
         </button>
-      </div>
 
-      {/* Close button (desktop/tablet) */}
-      <button
-        className="close-button"
-        onClick={() => useFlightStore.getState().setShowCard(false)}
-        aria-label={UI_TEXT.close}
-      >
-        <FaTimes />
-      </button>
+        {/* Location Header */}
+        <div className="location-header">
+          <img
+            src={`https://flagcdn.com/w80/${exp.countryCode.toLowerCase()}.png`}
+            alt={exp.countryCode}
+            className="country-flag"
+          />
+          <h2 className="location-name">{exp.location.name}</h2>
+        </div>
 
-      {/* Location Header */}
-      <div className="location-header">
-        <img
-          src={`https://flagcdn.com/w80/${exp.countryCode.toLowerCase()}.png`}
-          alt={exp.countryCode}
-          className="country-flag"
-        />
-        <h2 className="location-name">{exp.location.name}</h2>
-      </div>
-
-
-      {(
         <div className="section lavoro-section">
           <div className="work-meta">
             <h4 className="job-title">{exp.lavoro.jobTitle}</h4>
@@ -158,24 +162,36 @@ export default function ExperienceCard() {
               ))}
             </ul>
           </div>
+
+          {isFlowEngine && (
+            <button
+              className="diagram-button"
+              onClick={() => setShowDiagram(true)}
+            >
+              Visualizza il diagramma dell'architettura
+            </button>
+          )}
         </div>
-      )}
 
-
-      {/* Continue button */}
-      <div className="card-actions">
-        <button
-          className="continue-button"
-          onClick={() => {
-            const { setShowCard, nextLocation } = useFlightStore.getState();
-            setShowCard(false);
-            nextLocation();
-          }}
-          aria-label="Continue to next location"
-        >
-          {currentIndex === experiences.length - 1 ? UI_TEXT.restart : UI_TEXT.continue}
-        </button>
+        {/* Continue button */}
+        <div className="card-actions">
+          <button
+            className="continue-button"
+            onClick={() => {
+              const { setShowCard, nextLocation } = useFlightStore.getState();
+              setShowCard(false);
+              nextLocation();
+            }}
+            aria-label="Continue to next location"
+          >
+            {currentIndex === experiences.length - 1 ? UI_TEXT.restart : UI_TEXT.continue}
+          </button>
+        </div>
       </div>
-    </div>
+
+      {showDiagram && (
+        <FlowEngineDiagram onClose={() => setShowDiagram(false)} />
+      )}
+    </>
   );
 }

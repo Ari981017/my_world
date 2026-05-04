@@ -362,3 +362,26 @@
   .work-description { font-size: 0.80rem; }
   .responsibilities li { font-size: 0.78rem; }
 }
+
+.diagram-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 8px 16px;
+  background: rgba(93, 202, 165, 0.08);
+  border: 1px solid rgba(93, 202, 165, 0.35);
+  border-radius: 8px;
+  color: #5DCAA5;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+ 
+.diagram-button:hover {
+  background: rgba(93, 202, 165, 0.16);
+  border-color: rgba(93, 202, 165, 0.6);
+  color: #9FE1CB;
+}
+ 
