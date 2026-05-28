@@ -19,8 +19,9 @@ export default function WelcomeCard() {
 
         <div className="welcome-description">
           <p className="welcome-quote">"Credo che ogni luogo lasci qualcosa di sé in chi lo attraversa."</p>
-          <p>Ho fatto di questo portfolio un globo interattivo perché il viaggio è, da sempre, la mia più grande fonte di ispirazione. Ogni punto sulla mappa corrisponde a un'esperienza che mi ha cambiata — una città nuova, un team diverso, una sfida tecnica affrontata lontano da casa.</p>
-          <p>Sono una Full Stack Developer con 5 anni di esperienza su applicazioni web scalabili.</p>
+          <p>Ho creato questo portfolio come un globo interattivo perché il viaggio è da sempre una delle mie più grandi fonti di ispirazione. </p>
+          <p>Ogni punto sulla mappa rappresenta un luogo che ha lasciato un segno nella mia vita: viaggi con amici, momenti in famiglia, esperienze nuove e prospettive diverse che hanno influenzato anche il mio modo di creare e pensare.</p>
+          <p>Sono una Full Stack Developer con 4 anni di esperienza su applicazioni web scalabili.</p>
           <p className="welcome-tech">PHP · TypeScript · Vue 3 · Node.js · PostgreSQL · AWS</p>
         </div>
 
