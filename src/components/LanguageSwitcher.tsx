@@ -34,7 +34,6 @@ export default function LanguageSwitcher() {
         aria-expanded={isOpen}
       >
         <span className="language-flag">{currentLang.flag}</span>
-        <span className="language-label">{currentLang.code.toUpperCase()}</span>
         <span className={`language-arrow ${isOpen ? 'open' : ''}`}>▼</span>
       </button>
 
@@ -50,7 +49,6 @@ export default function LanguageSwitcher() {
               }}
             >
               <span className="language-flag">{lang.flag}</span>
-              <span className="language-name">{lang.label}</span>
               {language === lang.code && <span className="check-mark">✓</span>}
             </button>
           ))}

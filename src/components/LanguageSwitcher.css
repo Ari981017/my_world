@@ -9,23 +9,26 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(0, 0, 0, 0.6);
+  background: linear-gradient(135deg, rgba(4, 3, 12, 0.75), var(--color-surface));
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 0.5rem 0.75rem;
-  color: white;
+  color: var(--color-text);
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
-  min-width: 100px;
+  min-width: 10px;
 }
 
-.language-selector:hover {
-  background: rgba(0, 0, 0, 0.8);
-  border-color: rgba(255, 255, 255, 0.2);
+.language-selector:hover,
+.language-selector:focus-visible {
+  background: linear-gradient(135deg, rgba(4, 3, 12, 0.85), rgba(168, 85, 247, 0.14));
+  border-color: var(--color-aurora-violet);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.25);
+  outline: none;
 }
 
 .language-flag {
@@ -53,12 +56,31 @@
   top: calc(100% + 0.5rem);
   left: 0;
   min-width: 100%;
-  background: rgba(0, 0, 0, 0.9);
+  background: linear-gradient(135deg, rgba(4, 3, 12, 0.92), rgba(168, 85, 247, 0.08));
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 16px rgba(168, 85, 247, 0.12);
+  transform-origin: top left;
+  animation: dropdown-in 0.18s ease-out;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .language-dropdown {
+    animation: none;
+  }
 }
 
 .language-option {
@@ -69,27 +91,29 @@
   padding: 0.75rem 1rem;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text-muted);
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .language-option:last-child {
   border-bottom: none;
 }
 
-.language-option:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+.language-option:hover,
+.language-option:focus-visible {
+  background: rgba(168, 85, 247, 0.08);
+  color: var(--color-text);
+  outline: none;
 }
 
 .language-option.active {
-  background: rgba(82, 39, 255, 0.15);
-  color: white;
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--color-text);
 }
 
 .language-name {
@@ -97,7 +121,7 @@
 }
 
 .check-mark {
-  color: #5227FF;
+  color: var(--color-aurora-violet);
   font-weight: bold;
   font-size: 1rem;
 }
