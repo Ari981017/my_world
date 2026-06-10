@@ -1,16 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { useFlightStore } from '../store/flightStore';
 import { useExperiences } from '../data/experiences';
-import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaEnvelope, FaFileAlt } from 'react-icons/fa';
 import './LeftPanel.css';
+import { useLanguage } from '../hooks/useLanguage';
 
 export default function LeftPanel() {
   const { t } = useTranslation('common');
   const experiences = useExperiences();
+  const { language } = useLanguage();
   const hasStarted = useFlightStore((state) => state.hasStarted);
   const currentIndex = useFlightStore((state) => state.currentIndex);
   const goToLocation = useFlightStore((state) => state.goToLocation);
   const setShowCard = useFlightStore((state) => state.setShowCard);
+  const cvFile = language === 'it' ? '/cv/cv_arianna_toniolo.pdf' : '/cv/cv_arianna_toniolo_en.pdf';
 
   if (!hasStarted) return null;
 
@@ -48,6 +51,9 @@ export default function LeftPanel() {
         </a>
         <a href="mailto:ariannatoniolo7@gmail.com" aria-label="Email">
           <FaEnvelope />
+        </a>
+        <a href={cvFile} target="_blank" rel="noopener noreferrer" aria-label="CV">
+          <FaFileAlt/>
         </a>
       </div>
     </div>

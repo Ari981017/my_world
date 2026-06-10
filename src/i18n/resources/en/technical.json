@@ -4,6 +4,7 @@
   "mainTitle": "Flow Engine — AI Conversational Runtime",
   "hint": "Click on a component to learn more",
   "viewDetailedDiagram": "View detailed diagram →",
+  "closeDiagram": "Close diagram",
   "explanations": {
     "http": {
       "title": "HTTP layer — Arrest framework",
@@ -37,6 +38,7 @@
   "diagrams": {
     "runner": {
       "title": "FlowRunner — cycle for each HTTP request",
+      "label": "FlowRunner lifecycle",
       "phase1": "1 — compilation (once per flow)",
       "phase2": "2 — cycle for each HTTP request",
       "phase3": "3 — task name sanitization (FSMCompiler)",
@@ -64,6 +66,7 @@
     },
     "memory": {
       "title": "MemoryManager — 3-hash architecture with priority",
+      "label": "MemoryManager 3-hash",
       "keyPattern": "Redis key pattern: tenant:{tenantId}:conversation:{convId}:vars:{hash}",
       "varsTools": "vars:tools",
       "maxPriority": "Maximum priority",
@@ -92,6 +95,7 @@
     },
     "bootstrap": {
       "title": "FlowEngineBootstrap — initialization sequence",
+      "label": "Bootstrap sequence",
       "bootstrap": "FlowEngineBootstrap",
       "initialize": "initialize()",
       "step1": "step 1",
