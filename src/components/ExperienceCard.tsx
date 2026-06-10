@@ -1,12 +1,16 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaTimes, FaStepBackward, FaStepForward } from 'react-icons/fa';
 import { useFlightStore } from '../store/flightStore';
-import { experiences } from '../data/experiences';
-import { UI_TEXT } from '../config/constants';
+import { useExperiences } from '../data/experiences';
+import { useLanguage } from '../hooks/useLanguage';
 import FlowEngineDiagram from './FlowEngineDiagram';
 import './ExperienceCard.css';
 
 export default function ExperienceCard() {
+  const { t } = useTranslation('common');
+  const { language } = useLanguage();
+  const experiences = useExperiences();
   const { currentIndex, showCard } = useFlightStore();
   const [showDiagram, setShowDiagram] = useState(false);
 
@@ -30,7 +34,8 @@ export default function ExperienceCard() {
         return 'Invalid date range';
       }
 
-      let endStr = UI_TEXT.present;
+      const locale = language === 'it' ? 'it-IT' : 'en-US';
+      let endStr = t('present');
 
       if (end !== 'present') {
         if (!datePattern.test(end)) {
@@ -45,13 +50,13 @@ export default function ExperienceCard() {
           return 'Invalid date range';
         }
 
-        endStr = endDate.toLocaleDateString('en-US', {
+        endStr = endDate.toLocaleDateString(locale, {
           month: 'short',
           year: 'numeric',
         });
       }
 
-      return `${startDate.toLocaleDateString('en-US', {
+      return `${startDate.toLocaleDateString(locale, {
         month: 'short',
         year: 'numeric'
       })} - ${endStr}`;
@@ -93,7 +98,7 @@ export default function ExperienceCard() {
           <button
             className="mobile-nav-btn"
             onClick={() => useFlightStore.getState().setShowCard(false)}
-            aria-label={UI_TEXT.close}
+            aria-label={t('close')}
           >
             <FaTimes />
           </button>
@@ -103,7 +108,7 @@ export default function ExperienceCard() {
         <button
           className="close-button"
           onClick={() => useFlightStore.getState().setShowCard(false)}
-          aria-label={UI_TEXT.close}
+          aria-label={t('close')}
         >
           <FaTimes />
         </button>
@@ -155,7 +160,7 @@ export default function ExperienceCard() {
           <p className="work-description">{exp.lavoro.description}</p>
 
           <div className="responsibilities">
-            <h5>{UI_TEXT.keyResponsibilities}</h5>
+            <h5>{t('keyResponsibilities')}</h5>
             <ul>
               {exp.lavoro.responsibilities.map((resp, idx) => (
                 <li key={idx}>{resp}</li>
@@ -168,7 +173,7 @@ export default function ExperienceCard() {
               className="diagram-button"
               onClick={() => setShowDiagram(true)}
             >
-              Visualizza il diagramma dell'architettura
+              {t('viewArchitectureDiagram')}
             </button>
           )}
         </div>
@@ -184,7 +189,7 @@ export default function ExperienceCard() {
             }}
             aria-label="Continue to next location"
           >
-            {currentIndex === experiences.length - 1 ? UI_TEXT.restart : UI_TEXT.continue}
+            {currentIndex === experiences.length - 1 ? t('restart') : t('continue')}
           </button>
         </div>
       </div>

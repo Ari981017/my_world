@@ -1,0 +1,119 @@
+{
+  "exp1": {
+    "company": "Esosphera",
+    "jobTitle": "Full Stack Developer",
+    "description": "Development of scalable enterprise web applications at a software house specialized in enterprise solutions. Full stack role between PHP/Node.js backend and Vue 3 frontend, with strong focus on code quality, API integration and modular architectures.",
+    "responsibilities": [
+      "Backend design and development with PHP/Yii2, Node.js and TypeScript",
+      "Building dynamic interfaces with Vue 3",
+      "External API integration (WhatsApp, SMS, Email)",
+      "JWT authentication and role-based authorization (RBAC) implementation",
+      "API documentation with Swagger and testing with PHPUnit",
+      "Cross-team collaboration using Agile methodology for iterative releases"
+    ]
+  },
+  "exp2": {
+    "company": "",
+    "jobTitle": "Frontend Lead — Multichannel Module",
+    "description": "Development of the configuration wizard for omnichannel marketing campaigns, one of the platform's core tools. Management of the entire frontend cycle: component architecture, validations, state management and UX optimization for complex flows.",
+    "responsibilities": [
+      "Advanced wizard to configure Email, SMS, WhatsApp and Phone campaigns",
+      "Reusable and scalable Vue 3 component architecture",
+      "State management with Pinia for multi-step flows",
+      "Dynamic form validation with Vee-Validate",
+      "Backend API integration for campaign management",
+      "Frontend performance tuning to reduce perceived latency"
+    ]
+  },
+  "exp3": {
+    "company": "Previnet S.p.A.",
+    "jobTitle": "Back-End Developer",
+    "description": "Development and refactoring of legacy backend applications for a company in the pension sector. Focus on code robustness, database optimization and collaboration with QA team for production release.",
+    "responsibilities": [
+      "Backend application development and maintenance in Perl",
+      "Legacy code refactoring to improve readability and robustness",
+      "MySQL query optimization and database structure improvements",
+      "Design of reusable modules with technical documentation",
+      "Collaboration with QA and operations teams for deployment and monitoring"
+    ]
+  },
+  "exp4": {
+    "company": "",
+    "jobTitle": "Software Architect — Flow Engine AI",
+    "description": "Design and development of the AI-driven conversational runtime, the most architecturally complex project of the platform. Based on Finite State Machines with XState v5 in a microservices architecture, it manages the entire execution logic of conversational flows.",
+    "responsibilities": [
+      "Microservices architecture for AI conversational runtime",
+      "Dynamic compilation of Flow JSON into FSM with XState v5",
+      "Snapshot persistence and conversation resume on Redis",
+      "3-hash memory model with deterministic priority",
+      "Versioned runtime API exposure",
+      "40% response time reduction through microservices optimization"
+    ]
+  },
+  "exp5": {
+    "company": "",
+    "jobTitle": "API & Integration Specialist",
+    "description": "Integration of external communication channels into the enterprise platform and definition of API quality standards. Responsible for technical documentation and automated endpoint testing.",
+    "responsibilities": [
+      "WhatsApp Business, SMS provider and transactional Email API integration",
+      "RESTful API documentation with Swagger/OpenAPI",
+      "Automated endpoint testing with PHPUnit",
+      "File and asset management on AWS S3",
+      "Internal standards definition for API quality and maintainability",
+      "API contract validation with Postman"
+    ]
+  },
+  "exp6": {
+    "company": "",
+    "jobTitle": "Database & Performance Engineer",
+    "description": "Database performance optimization across the entire enterprise platform. Interventions on critical queries, indexing and caching that led to a 35% improvement in overall application performance.",
+    "responsibilities": [
+      "Analysis and rewriting of critical SQL queries to reduce response times",
+      "35% performance improvement through PostgreSQL optimization",
+      "Caching layer implementation with Redis",
+      "Database schema refactoring for scalability",
+      "Zero-downtime migration management",
+      "Sybase database support in legacy contexts"
+    ]
+  },
+  "exp7": {
+    "company": "",
+    "jobTitle": "QA & Testing Specialist",
+    "description": "Code quality oversight through automated testing integrated into the Agile cycle. Team reference for testing standards, code coverage and end-to-end quality assurance processes.",
+    "responsibilities": [
+      "Unit and integration testing with PHPUnit",
+      "Frontend testing with Jest",
+      "API validation and testing with Swagger and Postman",
+      "Code coverage analysis and critical area identification",
+      "Test integration in CI/CD pipeline",
+      "Testing best practices definition for the team"
+    ]
+  },
+  "exp8": {
+    "company": "",
+    "jobTitle": "Frontend Developer — Vue 3",
+    "description": "User interface development for the enterprise platform with Vue 3. Focus on reusable components, smooth user experience and client-side performance.",
+    "responsibilities": [
+      "Modular and reusable Vue 3 component development",
+      "Froala Editor integration for rich text functionality",
+      "State management with Pinia for multi-module applications",
+      "Responsive UI with Bootstrap",
+      "Bundle size optimization and asynchronous module loading",
+      "Pixel-perfect UI implementation in collaboration with designers"
+    ]
+  },
+  "exp9": {
+    "company": "",
+    "jobTitle": "Tech Lead — Backend & Architecture",
+    "description": "Application architecture and development processes oversight. Responsible for security, version control and Agile methodology in enterprise platform projects.",
+    "responsibilities": [
+      "RESTful microservices implementation with Node.js and Express",
+      "Application security: JWT authentication and RBAC systems",
+      "Git repository management with GitLab and GitHub",
+      "Cloud storage and asset management with AWS S3",
+      "Agile/SCRUM process facilitation with Jira",
+      "Code review and technical team mentoring"
+    ]
+  },
+  "periodLabel": "Project"
+}

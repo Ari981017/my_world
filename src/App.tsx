@@ -9,6 +9,7 @@ import FlightControls from './components/FlightControls';
 import LoadingScreen from './components/LoadingScreen';
 import AuroraBackground from './components/AuroraBackground';
 import LeftPanel from './components/LeftPanel';
+import LanguageSwitcher from './components/LanguageSwitcher';
 import './App.css';
 
 const MIN_LOADING_MS = 500;
@@ -16,10 +17,17 @@ const MIN_LOADING_MS = 500;
 function LoadingOverlay() {
   const { active } = useProgress();
   const [visible, setVisible] = useState(true);
-  const startTime = useRef(Date.now());
+  const startTime = useRef<number | null>(null);
+
+  // Initialize startTime in useEffect to avoid calling Date.now() during render
+  useEffect(() => {
+    if (startTime.current === null) {
+      startTime.current = Date.now();
+    }
+  }, []);
 
   useEffect(() => {
-    if (!active) {
+    if (!active && startTime.current !== null) {
       const elapsed = Date.now() - startTime.current;
       const remaining = MIN_LOADING_MS - elapsed;
       const delay = remaining > 0 ? remaining : 0;
@@ -53,6 +61,7 @@ export default function App() {
       </DotGrid>
 
       <LoadingOverlay />
+      <LanguageSwitcher />
       <WelcomeCard />
       <LeftPanel />
       <ExperienceCard />

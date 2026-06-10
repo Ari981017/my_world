@@ -1,0 +1,151 @@
+{
+  "backButton": "Panoramica",
+  "architecture": "Architecture",
+  "mainTitle": "Flow Engine — AI Conversational Runtime",
+  "hint": "Clicca su un componente per saperne di più",
+  "viewDetailedDiagram": "Visualizza diagramma dettagliato →",
+  "explanations": {
+    "http": {
+      "title": "HTTP layer — Arrest framework",
+      "body": "Espone le API REST del Flow Engine verso l'esterno. Ogni endpoint gestisce una fase del ciclo di vita conversazionale: handle-new-contact inizializza una nuova conversazione, change-task transiziona lo stato FSM, prompt restituisce il system prompt per l'LLM, memory gestisce le variabili di contesto, close-contact chiude il contatto in scenari multi-contact."
+    },
+    "flowservice": {
+      "title": "FlowService",
+      "body": "Implementazione concreta di FlowServiceAbstract per l'ambiente di sviluppo e testing. Carica i flow da MongoDB tramite FlowDomainObject, gestisce il tracciamento delle conversazioni attive e fornisce utility di debug come getRunner() e cleanupConversation(). In produzione viene sostituita da un'implementazione che carica i flow dal database del tenant."
+    },
+    "abstract": {
+      "title": "FlowServiceAbstract",
+      "body": "Classe base astratta che definisce l'intero workflow di orchestrazione conversazionale con il Template Method Pattern. Implementa initializeConversationAndGetData() (6 operazioni Redis, ottimizzato del 50%), changeTaskAndGetData() (7 op, -36%), resumeConversationAndGetData() (10 op, -29%). Solo loadFlow() è astratto — tutto il resto è condiviso tra le implementazioni."
+    },
+    "runner": {
+      "title": "FlowRunner",
+      "body": "Gestisce il ciclo di vita della FSM per una singola conversazione. FSMCompiler traduce il Flow JSON in una macchina XState v5: i nomi dei task vengono sanitizzati (spazi → underscore, accenti rimossi) e diventano direttamente gli eventi XState. Ogni richiesta HTTP carica lo snapshot da Redis, invia l'evento, salva il nuovo snapshot."
+    },
+    "memory": {
+      "title": "MemoryManager",
+      "body": "Implementa lo storage variabili a 3 hash con risoluzione a priorità deterministica: vars:tools (priorità massima, scritto da tool MCP esterni) → vars:convMiner (valori estratti dall'AI) → vars:definitions (default dalla configurazione del flow). Il Conditional Fetch basato su versione evita 2 chiamate Redis su 3 quando la memoria non è cambiata."
+    },
+    "mongo": {
+      "title": "MongoDB",
+      "body": "Persistenza dei flow conversazionali tramite AssetContainer e FlowDomainObject. All'avvio vengono caricati 8 fixture flows negli ambienti configurati: simpleFlow, complexFlow, medicalBooking, multiContact, flowCupSolidale e varianti, simpleFlowWithCheckpoints, flowWithCustomAudioConfig. I flow persistono tra riavvii del servizio."
+    },
+    "redis": {
+      "title": "FlowRedisService + Redis",
+      "body": "FlowRedisService è un Singleton wrapper che garantisce una singola connessione Redis per tutta l'applicazione. Redis ospita tre categorie di dati: snapshot XState serializzati per la persistence delle FSM tra richieste stateless, i 3 hash della memoria conversazionale (definitions, convMiner, tools) con TTL per la scadenza automatica, e la lista dei contatti precedenti per i flussi multi-contact."
+    }
+  },
+  "diagrams": {
+    "runner": {
+      "title": "FlowRunner — ciclo per ogni richiesta HTTP",
+      "phase1": "1 — compilazione (una volta per flow)",
+      "phase2": "2 — ciclo per ogni richiesta HTTP",
+      "phase3": "3 — sanitizzazione nomi task (FSMCompiler)",
+      "flowJson": "Flow JSON",
+      "configFromDb": "config dal DB",
+      "fsmCompiler": "FSMCompiler",
+      "sanitizeTask": "sanitizza task → eventi",
+      "xstateMachine": "XState machine",
+      "actorStart": "actor.start()",
+      "redis": "Redis",
+      "previousSnapshot": "snapshot precedente",
+      "restoreFromSnapshot": "restoreFromSnapshot()",
+      "actorRestored": "actor ripristinato",
+      "actorSend": "actor.send(evento)",
+      "stateTransition": "transizione di stato",
+      "actorGetSnapshot": "actor.getSnapshot()",
+      "serializedState": "stato serializzato",
+      "saveSnapshotTTL": "salva snapshot + TTL",
+      "getAgentData": "getAgentData()",
+      "responseToClient": "risposta al client",
+      "spacesToUnderscore": "spazi → underscore",
+      "accentsRemoved": "accenti rimossi",
+      "onlyLowercase": "solo minuscolo",
+      "xstateEventName": "= nome evento XState"
+    },
+    "memory": {
+      "title": "MemoryManager — architettura 3-hash con priorità",
+      "keyPattern": "Redis key pattern: tenant:{tenantId}:conversation:{convId}:vars:{hash}",
+      "varsTools": "vars:tools",
+      "maxPriority": "Priorità massima",
+      "writtenByMcp": "Scritto da tool MCP",
+      "externalToPlatform": "esterni alla piattaforma",
+      "alwaysPrecedence": "Ha sempre la precedenza",
+      "varsConvMiner": "vars:convMiner",
+      "mediumPriority": "Priorità media",
+      "valuesExtracted": "Valori estratti dall'AI",
+      "fromConversation": "dalla conversazione",
+      "populatedByLlm": "Popolato dall'LLM",
+      "varsDefinitions": "vars:definitions",
+      "minPriority": "Priorità minima",
+      "defaultFromConfig": "Default dalla config",
+      "fromFlow": "del flow",
+      "fixedVersion": "Campo \"version\" fisso",
+      "priorityAlgorithm": "Algoritmo di risoluzione priorità",
+      "getVariable": "Get variable value",
+      "checkTools": "Check vars:tools",
+      "found": "found",
+      "notFound": "not found",
+      "return": "return",
+      "checkConvMiner": "Check vars:convMiner",
+      "checkDefinitions": "Check vars:definitions",
+      "returnNull": "return null"
+    },
+    "bootstrap": {
+      "title": "FlowEngineBootstrap — sequenza di inizializzazione",
+      "bootstrap": "FlowEngineBootstrap",
+      "initialize": "initialize()",
+      "step1": "step 1",
+      "step2": "step 2",
+      "step3": "step 3",
+      "step4": "step 4",
+      "onInit": "FlowServiceBootstrap.onInit()",
+      "connections": "DB connection + Redis connection",
+      "assetInit": "AssetContainer.init()",
+      "mongoConfig": "mongoUrl · globalDb · tenantDbPrefix",
+      "envFixture": "EnvironmentFixtureLoader",
+      "loadEnvs": "carica environments in MongoDB",
+      "fixtureLoader": "FixtureLoader",
+      "loadFlows": "carica 8 flows + deploy",
+      "newFlowService": "new FlowService(redisService)",
+      "instanceReady": "istanza pronta · Redis iniettato",
+      "ready": "Flow Engine ready"
+    },
+    "main": {
+      "title": "Flow Engine — architettura a microservizi",
+      "description": "Diagramma strutturale del Flow Engine AI",
+      "httpLayer": "HTTP layer — Arrest framework",
+      "httpEndpoints": "handle-new-contact · change-task · prompt · memory · close-contact · render-template · ai-helpers",
+      "serviceLayer": "Service layer",
+      "flowService": "FlowService",
+      "loadFlow": "loadFlow() da MongoDB",
+      "cleanup": "cleanupConversation() · getRunner()",
+      "abstract": "FlowServiceAbstract",
+      "initConversation": "initializeConversation()",
+      "changeResume": "changeTask() · resumeConversation()",
+      "extends": "extends",
+      "coreComponents": "Core components",
+      "runner": "FlowRunner",
+      "fsmCompiler": "FSMCompiler · XState actor",
+      "compileFsm": "compileFsm() · changeTask()",
+      "memory": "MemoryManager",
+      "threeHash": "3-hash architecture",
+      "priorityResolution": "priority resolution · conditional fetch",
+      "storageLayer": "Storage layer",
+      "mongo": "MongoDB",
+      "assetContainer": "AssetContainer",
+      "flowPersistence": "Flow persistence",
+      "flowDomainObject": "FlowDomainObject",
+      "fixtureFlows": "8 fixture flows",
+      "environmentsConfig": "Environments config",
+      "redis": "FlowRedisService + Redis",
+      "singleton": "Singleton wrapper",
+      "fsmSnapshots": "FSM snapshots",
+      "varsHashes": "vars:definitions · vars:convMiner",
+      "varsTtl": "vars:tools · TTL management",
+      "redisPriority": "Redis priority:",
+      "toolsMax": "vars:tools (max)",
+      "convMiner": "vars:convMiner",
+      "definitions": "vars:definitions"
+    }
+  }
+}

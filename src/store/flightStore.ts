@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { experiences } from '../data/experiences';
+import { EXPERIENCES_COUNT } from '../data/experiences';
 
 interface FlightState {
   currentIndex: number;
@@ -33,7 +33,7 @@ export const useFlightStore = create<FlightState>((set, get) => ({
     if (previousIndex === currentIndex) {
       // No active animation — advance to next location to kick off flight
       set((state) => ({
-        currentIndex: (state.currentIndex + 1) % experiences.length,
+        currentIndex: (state.currentIndex + 1) % EXPERIENCES_COUNT,
         showCard: false,
         isPlaying: true,
       }));
@@ -45,7 +45,7 @@ export const useFlightStore = create<FlightState>((set, get) => ({
 
   nextLocation: () =>
     set((state) => ({
-      currentIndex: (state.currentIndex + 1) % experiences.length,
+      currentIndex: (state.currentIndex + 1) % EXPERIENCES_COUNT,
       showCard: false,
       isPlaying: true,
     })),
@@ -54,7 +54,7 @@ export const useFlightStore = create<FlightState>((set, get) => ({
     set((state) => ({
       currentIndex:
         state.currentIndex === 0
-          ? experiences.length - 1
+          ? EXPERIENCES_COUNT - 1
           : state.currentIndex - 1,
       showCard: false,
       isPlaying: true,
@@ -62,9 +62,9 @@ export const useFlightStore = create<FlightState>((set, get) => ({
 
   goToLocation: (index: number) => {
     // Validate index bounds
-    if (index < 0 || index >= experiences.length) {
+    if (index < 0 || index >= EXPERIENCES_COUNT) {
       console.error(
-        `Invalid location index: ${index}. Valid range: 0-${experiences.length - 1}`
+        `Invalid location index: ${index}. Valid range: 0-${EXPERIENCES_COUNT - 1}`
       );
       return;
     }

@@ -1,0 +1,151 @@
+{
+  "backButton": "Overview",
+  "architecture": "Architecture",
+  "mainTitle": "Flow Engine — AI Conversational Runtime",
+  "hint": "Click on a component to learn more",
+  "viewDetailedDiagram": "View detailed diagram →",
+  "explanations": {
+    "http": {
+      "title": "HTTP layer — Arrest framework",
+      "body": "Exposes the Flow Engine REST APIs externally. Each endpoint handles a phase of the conversational lifecycle: handle-new-contact initializes a new conversation, change-task transitions the FSM state, prompt returns the system prompt for the LLM, memory manages context variables, close-contact closes the contact in multi-contact scenarios."
+    },
+    "flowservice": {
+      "title": "FlowService",
+      "body": "Concrete implementation of FlowServiceAbstract for development and testing environments. Loads flows from MongoDB via FlowDomainObject, manages tracking of active conversations and provides debug utilities like getRunner() and cleanupConversation(). In production it is replaced by an implementation that loads flows from the tenant database."
+    },
+    "abstract": {
+      "title": "FlowServiceAbstract",
+      "body": "Abstract base class that defines the entire conversational orchestration workflow using the Template Method Pattern. Implements initializeConversationAndGetData() (6 Redis operations, 50% optimized), changeTaskAndGetData() (7 ops, -36%), resumeConversationAndGetData() (10 ops, -29%). Only loadFlow() is abstract — everything else is shared between implementations."
+    },
+    "runner": {
+      "title": "FlowRunner",
+      "body": "Manages the FSM lifecycle for a single conversation. FSMCompiler translates the Flow JSON into an XState v5 machine: task names are sanitized (spaces → underscores, accents removed) and become XState events directly. Each HTTP request loads the snapshot from Redis, sends the event, saves the new snapshot."
+    },
+    "memory": {
+      "title": "MemoryManager",
+      "body": "Implements 3-hash variable storage with deterministic priority resolution: vars:tools (maximum priority, written by external MCP tools) → vars:convMiner (values extracted by AI) → vars:definitions (defaults from flow configuration). Version-based Conditional Fetch avoids 2 out of 3 Redis calls when memory hasn't changed."
+    },
+    "mongo": {
+      "title": "MongoDB",
+      "body": "Persistence of conversational flows via AssetContainer and FlowDomainObject. At startup 8 fixture flows are loaded into configured environments: simpleFlow, complexFlow, medicalBooking, multiContact, flowCupSolidale and variants, simpleFlowWithCheckpoints, flowWithCustomAudioConfig. Flows persist between service restarts."
+    },
+    "redis": {
+      "title": "FlowRedisService + Redis",
+      "body": "FlowRedisService is a Singleton wrapper that guarantees a single Redis connection for the entire application. Redis hosts three categories of data: serialized XState snapshots for FSM persistence between stateless requests, the 3 hashes of conversational memory (definitions, convMiner, tools) with TTL for automatic expiration, and the list of previous contacts for multi-contact flows."
+    }
+  },
+  "diagrams": {
+    "runner": {
+      "title": "FlowRunner — cycle for each HTTP request",
+      "phase1": "1 — compilation (once per flow)",
+      "phase2": "2 — cycle for each HTTP request",
+      "phase3": "3 — task name sanitization (FSMCompiler)",
+      "flowJson": "Flow JSON",
+      "configFromDb": "config from DB",
+      "fsmCompiler": "FSMCompiler",
+      "sanitizeTask": "sanitize tasks → events",
+      "xstateMachine": "XState machine",
+      "actorStart": "actor.start()",
+      "redis": "Redis",
+      "previousSnapshot": "previous snapshot",
+      "restoreFromSnapshot": "restoreFromSnapshot()",
+      "actorRestored": "actor restored",
+      "actorSend": "actor.send(event)",
+      "stateTransition": "state transition",
+      "actorGetSnapshot": "actor.getSnapshot()",
+      "serializedState": "serialized state",
+      "saveSnapshotTTL": "save snapshot + TTL",
+      "getAgentData": "getAgentData()",
+      "responseToClient": "response to client",
+      "spacesToUnderscore": "spaces → underscores",
+      "accentsRemoved": "accents removed",
+      "onlyLowercase": "lowercase only",
+      "xstateEventName": "= XState event name"
+    },
+    "memory": {
+      "title": "MemoryManager — 3-hash architecture with priority",
+      "keyPattern": "Redis key pattern: tenant:{tenantId}:conversation:{convId}:vars:{hash}",
+      "varsTools": "vars:tools",
+      "maxPriority": "Maximum priority",
+      "writtenByMcp": "Written by MCP tools",
+      "externalToPlatform": "external to platform",
+      "alwaysPrecedence": "Always takes precedence",
+      "varsConvMiner": "vars:convMiner",
+      "mediumPriority": "Medium priority",
+      "valuesExtracted": "Values extracted by AI",
+      "fromConversation": "from conversation",
+      "populatedByLlm": "Populated by LLM",
+      "varsDefinitions": "vars:definitions",
+      "minPriority": "Minimum priority",
+      "defaultFromConfig": "Defaults from config",
+      "fromFlow": "from flow",
+      "fixedVersion": "Fixed \"version\" field",
+      "priorityAlgorithm": "Priority resolution algorithm",
+      "getVariable": "Get variable value",
+      "checkTools": "Check vars:tools",
+      "found": "found",
+      "notFound": "not found",
+      "return": "return",
+      "checkConvMiner": "Check vars:convMiner",
+      "checkDefinitions": "Check vars:definitions",
+      "returnNull": "return null"
+    },
+    "bootstrap": {
+      "title": "FlowEngineBootstrap — initialization sequence",
+      "bootstrap": "FlowEngineBootstrap",
+      "initialize": "initialize()",
+      "step1": "step 1",
+      "step2": "step 2",
+      "step3": "step 3",
+      "step4": "step 4",
+      "onInit": "FlowServiceBootstrap.onInit()",
+      "connections": "DB connection + Redis connection",
+      "assetInit": "AssetContainer.init()",
+      "mongoConfig": "mongoUrl · globalDb · tenantDbPrefix",
+      "envFixture": "EnvironmentFixtureLoader",
+      "loadEnvs": "load environments into MongoDB",
+      "fixtureLoader": "FixtureLoader",
+      "loadFlows": "load 8 flows + deploy",
+      "newFlowService": "new FlowService(redisService)",
+      "instanceReady": "instance ready · Redis injected",
+      "ready": "Flow Engine ready"
+    },
+    "main": {
+      "title": "Flow Engine — microservices architecture",
+      "description": "Flow Engine AI structural diagram",
+      "httpLayer": "HTTP layer — Arrest framework",
+      "httpEndpoints": "handle-new-contact · change-task · prompt · memory · close-contact · render-template · ai-helpers",
+      "serviceLayer": "Service layer",
+      "flowService": "FlowService",
+      "loadFlow": "loadFlow() from MongoDB",
+      "cleanup": "cleanupConversation() · getRunner()",
+      "abstract": "FlowServiceAbstract",
+      "initConversation": "initializeConversation()",
+      "changeResume": "changeTask() · resumeConversation()",
+      "extends": "extends",
+      "coreComponents": "Core components",
+      "runner": "FlowRunner",
+      "fsmCompiler": "FSMCompiler · XState actor",
+      "compileFsm": "compileFsm() · changeTask()",
+      "memory": "MemoryManager",
+      "threeHash": "3-hash architecture",
+      "priorityResolution": "priority resolution · conditional fetch",
+      "storageLayer": "Storage layer",
+      "mongo": "MongoDB",
+      "assetContainer": "AssetContainer",
+      "flowPersistence": "Flow persistence",
+      "flowDomainObject": "FlowDomainObject",
+      "fixtureFlows": "8 fixture flows",
+      "environmentsConfig": "Environments config",
+      "redis": "FlowRedisService + Redis",
+      "singleton": "Singleton wrapper",
+      "fsmSnapshots": "FSM snapshots",
+      "varsHashes": "vars:definitions · vars:convMiner",
+      "varsTtl": "vars:tools · TTL management",
+      "redisPriority": "Redis priority:",
+      "toolsMax": "vars:tools (max)",
+      "convMiner": "vars:convMiner",
+      "definitions": "vars:definitions"
+    }
+  }
+}

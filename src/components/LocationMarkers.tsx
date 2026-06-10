@@ -1,4 +1,4 @@
-import { experiences } from '../data/experiences';
+import { experiencesLocations } from '../data/experiences';
 import { latLonToVector3 } from '../utils/coordinates';
 import { GLOBE_RADIUS } from '../config/constants';
 import { useFlightStore } from '../store/flightStore';
@@ -11,7 +11,7 @@ export default function LocationMarkers() {
 
   return (
     <>
-      {experiences.map((exp, index) => {
+      {experiencesLocations.map((exp, index) => {
         const position = latLonToVector3(
           exp.location.coordinates.lat,
           exp.location.coordinates.lon,

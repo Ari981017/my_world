@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import './LoadingScreen.css';
 
 export default function LoadingScreen() {
+  const { t } = useTranslation('common');
   return (
     <div className="loading-screen">
       <div className="loading-content">
@@ -9,7 +11,7 @@ export default function LoadingScreen() {
         <div className="loading-progress" aria-hidden="true">
           <div className="loading-progress-bar" />
         </div>
-        <p className="loading-text">CARICAMENTO</p>
+        <p className="loading-text">{t('loading')}</p>
       </div>
     </div>
   );

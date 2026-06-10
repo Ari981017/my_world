@@ -1,5 +1,5 @@
 import { useFlightStore } from '../store/flightStore';
-import { experiences } from '../data/experiences';
+import { experiencesLocations as experiences } from '../data/experiences';
 import {
   FaPlay,
   FaPause,

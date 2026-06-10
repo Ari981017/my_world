@@ -1,0 +1,11 @@
+{
+  "name": "Arianna Toniolo",
+  "jobTitle": "Full Stack Developer",
+  "quote": "Credo che ogni luogo lasci qualcosa di sé in chi lo attraversa.",
+  "intro": "Ho creato questo portfolio come un globo interattivo perché il viaggio è da sempre una delle mie più grandi fonti di ispirazione.",
+  "bio1": "Ogni punto sulla mappa rappresenta un luogo che ha lasciato un segno nella mia vita: viaggi con amici, momenti in famiglia, esperienze nuove e prospettive diverse che hanno influenzato anche il mio modo di creare e pensare.",
+  "bio2": "Sono una Full Stack Developer con 4 anni di esperienza su applicazioni web scalabili.",
+  "techStack": "PHP · TypeScript · Vue 3 · Node.js · PostgreSQL · AWS",
+  "startJourney": "INIZIA VIAGGIO",
+  "startJourneyLabel": "Inizia il viaggio"
+}

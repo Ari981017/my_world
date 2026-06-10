@@ -9,7 +9,7 @@ import LocationMarkers from './LocationMarkers';
 import { useFlightAnimation } from '../hooks/useFlightAnimation';
 import { useCameraFlightFollow } from '../hooks/useCameraFlightFollow';
 import { useFlightStore } from '../store/flightStore';
-import { experiences } from '../data/experiences';
+import { experiencesLocations as experiences } from '../data/experiences';
 import { latLonToVector3 } from '../utils/coordinates';
 import {
   CAMERA_ROTATION_SPEED,

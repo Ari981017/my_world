@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { useFlightStore } from '../store/flightStore';
-import { experiences } from '../data/experiences';
+import { experiencesLocations as experiences } from '../data/experiences';
 import { latLonToVector3 } from '../utils/coordinates';
 import {
   GLOBE_RADIUS,

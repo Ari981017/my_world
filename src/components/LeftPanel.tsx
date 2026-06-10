@@ -1,9 +1,12 @@
+import { useTranslation } from 'react-i18next';
 import { useFlightStore } from '../store/flightStore';
-import { experiences } from '../data/experiences';
+import { useExperiences } from '../data/experiences';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 import './LeftPanel.css';
 
 export default function LeftPanel() {
+  const { t } = useTranslation('common');
+  const experiences = useExperiences();
   const hasStarted = useFlightStore((state) => state.hasStarted);
   const currentIndex = useFlightStore((state) => state.currentIndex);
   const goToLocation = useFlightStore((state) => state.goToLocation);
@@ -21,7 +24,7 @@ export default function LeftPanel() {
 
   return (
     <div className="left-panel">
-      <p className="left-panel-heading">Destinazioni</p>
+      <p className="left-panel-heading">{t('destinations')}</p>
       <div className="left-panel-divider" />
       <ul className="left-panel-list">
         {experiences.map((exp, index) => (
