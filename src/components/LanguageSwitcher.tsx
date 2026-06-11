@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../hooks/useLanguage';
+import { useFlightStore } from '../store/flightStore';
 import './LanguageSwitcher.css';
 
 const languages = [
@@ -11,6 +12,11 @@ export default function LanguageSwitcher() {
   const { language, changeLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Hide on mobile when modals are open
+  const hasStarted = useFlightStore((state) => state.hasStarted);
+  const showCard = useFlightStore((state) => state.showCard);
+  const shouldHideOnMobile = !hasStarted || showCard;
 
   const currentLang = languages.find(lang => lang.code === language) || languages[0];
 
@@ -26,7 +32,10 @@ export default function LanguageSwitcher() {
   }, []);
 
   return (
-    <div className="language-switcher-dropdown" ref={dropdownRef}>
+    <div
+      className={`language-switcher-dropdown ${shouldHideOnMobile ? 'hide-on-mobile' : ''}`}
+      ref={dropdownRef}
+    >
       <button
         className="language-selector"
         onClick={() => setIsOpen(!isOpen)}
